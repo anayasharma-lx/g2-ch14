@@ -7,10 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ac:#7C3AED;--bg:#FDF6EE;--card:#fff;--ink:#1A1A2E;--ink2:#6B6B8A;--ok:#16A34A;--no:#DC2626;--r:20px}
+:root{--ac:#B45309;--bg:#FDF6EE;--card:#fff;--ink:#1A2E2E;--ink2:#5F7A7A;--ok:#16A34A;--no:#DC2626;--r:20px}
 html,body{width:100%;min-height:100vh;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
-
-/* ── Header ── */
 .hdr{width:100%;position:sticky;top:0;z-index:100;background:var(--ac);box-shadow:0 4px 24px rgba(0,0,0,.15)}
 .hdr-in{max-width:640px;margin:0 auto;padding:14px 20px 0;text-align:center}
 .ch-n{font-family:'Grandstander',cursive;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.65)}
@@ -19,285 +17,221 @@ html,body{width:100%;min-height:100vh;font-family:'Poppins',sans-serif;backgroun
 .tab{flex:1;padding:9px 0;text-align:center;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;cursor:pointer;border-radius:12px 12px 0 0;color:rgba(255,255,255,.6);transition:.2s;user-select:none}
 .tab.on{background:var(--bg);color:var(--ac)}
 .tab:not(.on):hover{color:#fff;background:rgba(255,255,255,.08)}
-
-/* ── Layout ── */
 .page{max-width:620px;margin:0 auto;padding:14px 14px 60px}
 .pnl{display:none;flex-direction:column;gap:16px}.pnl.on{display:flex}
 .card{background:var(--card);border-radius:var(--r);padding:20px 18px;box-shadow:0 3px 16px rgba(0,0,0,.06);position:relative;overflow:hidden}
 .cb{position:absolute;top:0;left:0;bottom:0;width:5px;border-radius:var(--r) 0 0 var(--r);background:var(--ac)}
 .ct{font-family:'Grandstander',cursive;font-size:15px;font-weight:800;padding-left:14px;margin-bottom:3px;line-height:1.3}
-.cs{font-size:12px;color:var(--ink2);padding-left:14px;margin-bottom:16px;line-height:1.6}
-
-/* ── Setup strip ── */
-.setup-strip{display:flex;gap:12px;flex-wrap:wrap;background:rgba(0,0,0,.02);border-radius:14px;padding:12px 14px;margin-bottom:16px;border:1.5px solid rgba(0,0,0,.06);align-items:center}
-.cg{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:8px 12px;border:1.5px solid rgba(0,0,0,.07)}
-.cg-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);min-width:48px}
-.sb{width:32px;height:32px;border-radius:50%;border:none;background:var(--ac);color:#fff;font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.cs{font-size:12px;color:var(--ink2);padding-left:14px;margin-bottom:14px;line-height:1.6}
+/* stepper */
+.cr{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.cg{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.03);border-radius:12px;padding:8px 12px;border:1.5px solid rgba(0,0,0,.06)}
+.cl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;min-width:48px}
+.sb{width:34px;height:34px;border-radius:50%;border:none;font-size:18px;font-weight:900;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 .sb:active{transform:scale(.88)}
-.sv{font-family:'Grandstander',cursive;font-size:26px;font-weight:900;min-width:30px;text-align:center;color:var(--ink)}
-.start-btn{font-family:'Grandstander',cursive;font-size:13px;font-weight:800;padding:9px 20px;border-radius:12px;border:none;background:var(--ac);color:#fff;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.12);transition:.15s;margin-left:auto}
-.start-btn:hover{transform:translateY(-1px);opacity:.9}
-
-/* ── Item pool ── */
-.pool-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px}
-.item-pool{min-height:64px;background:rgba(0,0,0,.02);border-radius:14px;border:1.5px dashed rgba(0,0,0,.1);padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:16px}
-.sweet{font-size:30px;cursor:pointer;user-select:none;transition:all .15s;line-height:1;border-radius:8px;padding:3px;border:2px solid transparent}
-.sweet:hover{transform:scale(1.2);background:rgba(0,0,0,.04)}
-.sweet.selected{background:rgba(124,58,237,.1);border-color:var(--ac);transform:scale(1.15)}
-.sweet.used{opacity:.18;pointer-events:none;filter:grayscale(1)}
-
-/* ── Boxes row ── */
-.boxes-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
-.box-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
-.box-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink2)}
-.box{min-width:88px;min-height:88px;background:rgba(0,0,0,.02);border:2px solid rgba(0,0,0,.1);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;cursor:pointer;transition:all .15s}
-.box:hover{border-color:var(--ac);background:rgba(124,58,237,.05);transform:scale(1.03)}
-.box-ph{font-size:11px;color:var(--ink2);font-weight:600;text-align:center;width:100%;padding-top:10px;pointer-events:none;opacity:.5}
-.box-sweet{font-size:20px;line-height:1;animation:sweetDrop .2s cubic-bezier(.36,1.6,.6,1)}
-@keyframes sweetDrop{from{transform:scale(0) translateY(-8px)}to{transform:scale(1)}}
-.box-count{font-family:'Grandstander',cursive;font-size:20px;font-weight:900;color:var(--ac)}
-
-/* ── Result panel ── */
-.result-panel{background:rgba(0,0,0,.02);border-radius:14px;padding:14px 16px;border:1.5px solid rgba(0,0,0,.06);text-align:center;min-height:70px}
-.result-eq{font-family:'Grandstander',cursive;font-size:28px;font-weight:900;color:var(--ink);min-height:36px;margin-bottom:5px}
-.result-eq .ans{color:var(--ok)}
-.result-words{font-size:13px;font-weight:700;min-height:20px;margin-bottom:4px}
-.result-praise{font-family:'Grandstander',cursive;font-size:18px;font-weight:800;min-height:24px;color:var(--ok)}
-
-/* ── Quiz scene ── */
-.quiz-scene{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px;background:rgba(0,0,0,.02);border-radius:14px;padding:12px;border:1.5px solid rgba(0,0,0,.06)}
-.quiz-box{min-width:65px;min-height:55px;background:#fff;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:6px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.qQ{font-family:'Grandstander',cursive;font-size:15px;font-weight:800;margin-bottom:12px;color:var(--ink)}
+.sv{font-family:'Grandstander',cursive;font-size:28px;font-weight:900;min-width:28px;text-align:center}
+/* blocks */
+.bx{background:rgba(0,0,0,.02);border-radius:14px;border:1.5px solid rgba(0,0,0,.06);padding:12px;min-height:60px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:14px}
+.flat{display:grid;grid-template-columns:repeat(10,8px);gap:1px}.flat-c{width:8px;height:8px;border-radius:1px;opacity:.8}
+.rod{display:flex;flex-direction:column;gap:1px}.rod-c{width:10px;height:10px;border-radius:1px;opacity:.8}
+.units{display:flex;flex-wrap:wrap;gap:2px;max-width:58px;align-self:flex-end}.unit-c{width:10px;height:10px;border-radius:2px;opacity:.8}
+.sep{width:1px;background:#D1D5DB;align-self:stretch;margin:0 3px}
+/* options */
 .opts{display:flex;gap:8px;flex-wrap:wrap}
-.opt{font-family:'Grandstander',cursive;font-size:22px;font-weight:800;min-width:68px;height:52px;border-radius:14px;border:2.5px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:0 10px}
+.opt{font-family:'Grandstander',cursive;font-size:22px;font-weight:800;min-width:72px;height:54px;border-radius:16px;border:2.5px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .opt:hover{border-color:var(--ac);transform:translateY(-2px)}
 .opt.ok{background:#DCFCE7;border-color:var(--ok);color:#15803D;animation:pop .3s}
 .opt.no{background:#FEE2E2;border-color:var(--no);color:var(--no);animation:shk .35s}
 @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
 @keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.fb{font-family:'Grandstander',cursive;font-size:14px;font-weight:700;min-height:20px;margin-top:10px}
+.fb{font-family:'Grandstander',cursive;font-size:14px;font-weight:700;min-height:20px;margin-top:10px;text-align:center}
 .nbtn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 24px;border-radius:14px;border:none;background:var(--ac);color:#fff;cursor:pointer;margin-top:12px;box-shadow:0 3px 10px rgba(0,0,0,.12);transition:.15s}
 .nbtn:hover{transform:translateY(-1px);opacity:.9}
 .btn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn:hover{transform:translateY(-1px)}
+.btn-p{background:var(--ac);color:#fff}
 .btn-g{background:#fff;color:var(--ink2);border:1.5px solid rgba(0,0,0,.1)}
 .btn-g:hover{border-color:var(--ac);color:var(--ac)}
+.chal{background:rgba(0,0,0,.02);border-radius:16px;padding:14px;border:1.5px dashed rgba(0,0,0,.1);margin-top:10px}
+.chal-q{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;margin-bottom:10px}
+.chal-q b{color:var(--ac);font-size:22px}
+canvas{display:block;border-radius:10px}
+/* drag & tap shared */
+.tappable{cursor:pointer;user-select:none;transition:transform .15s}
+.tappable:hover{transform:scale(1.08)}
+.tappable:active{transform:scale(.92)}
+/* misc */
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:6px 18px;border-radius:30px}
+.big{font-family:'Grandstander',cursive;font-weight:900;line-height:1;text-align:center}
 </style>
 </head>
 <body>
-
 <div class="hdr"><div class="hdr-in">
   <div class="ch-n">Chapter 14</div>
   <div class="ch-t">Division Readiness</div>
   <div class="tabs">
-    <div class="tab on" onclick="sw('learn')">Share</div>
-    <div class="tab" onclick="sw('practice')">Quiz</div>
+    <div class="tab on" onclick="sw('learn')">Learn</div>
+    <div class="tab" onclick="sw('practice')">Practice</div>
   </div>
 </div></div>
-
 <div class="page">
 
-  <!-- ── LEARN panel ── -->
-  <div class="pnl on" id="p-learn">
-
-    <div class="card"><div class="cb"></div>
-      <div class="ct">Share items equally into boxes</div>
-      <div class="cs">Choose how many items and boxes. Tap an item to select it — it will glow. Then tap a box to place it there. Every box must end up with the same number!</div>
-
-      <div class="setup-strip">
-        <div class="cg">
-          <span class="cg-lbl">Items</span>
-          <button class="sb" onclick="chSetup('items',-1)">−</button>
-          <span class="sv" id="itemsVal">12</span>
-          <button class="sb" onclick="chSetup('items',1)">+</button>
-        </div>
-        <div class="cg">
-          <span class="cg-lbl">Boxes</span>
-          <button class="sb" onclick="chSetup('boxes',-1)">−</button>
-          <span class="sv" id="boxesVal">3</span>
-          <button class="sb" onclick="chSetup('boxes',1)">+</button>
-        </div>
-        <button class="start-btn" onclick="startSharing()">Start ▶</button>
-      </div>
-
-      <div class="pool-lbl">Items to share <span id="poolCnt" style="font-weight:900;color:var(--ac)"></span></div>
-      <div class="item-pool" id="itemPool"></div>
-
-      <div class="pool-lbl" style="margin-bottom:10px">Share into these boxes</div>
-      <div class="boxes-row" id="boxesRow"></div>
-
-      <div class="result-panel">
-        <div class="result-eq" id="resultEq"></div>
-        <div class="result-words" id="resultWords"></div>
-        <div class="result-praise" id="resultPraise"></div>
-      </div>
+<div class="pnl on" id="p-learn">
+  <div class="card"><div class="cb"></div>
+    <div class="ct">Share objects equally into groups</div>
+    <div class="cs">Choose how many objects and how many groups. Tap an object to select it, then tap a box to place it. Every box must get the same number!</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;background:rgba(0,0,0,.02);border-radius:14px;padding:12px;border:1.5px solid rgba(0,0,0,.06);margin-bottom:14px;align-items:center">
+      <div class="cg"><span class="cl" style="color:var(--ac)">Objects</span><button class="sb" style="background:var(--ac)" onclick="chS('n',-1)">−</button><span class="sv" style="color:var(--ac)" id="nVal">12</span><button class="sb" style="background:var(--ac)" onclick="chS('n',1)">+</button></div>
+      <div class="cg"><span class="cl" style="color:var(--ac)">Groups</span><button class="sb" style="background:var(--ac)" onclick="chS('g',-1)">−</button><span class="sv" style="color:var(--ac)" id="gVal">3</span><button class="sb" style="background:var(--ac)" onclick="chS('g',1)">+</button></div>
+      <button class="btn btn-p" onclick="startS()" style="margin-left:auto">Start ▶</button>
     </div>
-
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px">Tap an object, then tap a box <span id="poolCnt"></span></div>
+    <div id="pool" style="min-height:60px;background:rgba(0,0,0,.02);border-radius:14px;border:1.5px dashed rgba(0,0,0,.1);padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px"></div>
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px">Your groups</div>
+    <div id="boxes" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:14px"></div>
+    <div id="result" style="background:rgba(0,0,0,.02);border-radius:14px;padding:14px;border:1.5px solid rgba(0,0,0,.06);text-align:center;min-height:50px"></div>
   </div>
-
-  <!-- ── PRACTICE panel ── -->
-  <div class="pnl" id="p-practice">
-
-    <div class="card"><div class="cb"></div>
-      <div class="ct">How many in each box?</div>
-      <div class="cs">Look at the items shared equally across the boxes. Count how many are in one box, then pick the right answer.</div>
-      <div class="qQ" id="quizQ">Loading…</div>
-      <div class="quiz-scene" id="quizScene"></div>
-      <div class="opts" id="qOpts"></div>
-      <div class="fb" id="qFb"></div>
-      <button class="nbtn" onclick="newQuiz()">Next question →</button>
-    </div>
-
+</div>
+<div class="pnl" id="p-practice">
+  <div class="card"><div class="cb"></div>
+    <div class="ct">How many in each group?</div>
+    <div class="cs">Objects have been shared equally. Count how many are in ONE group.</div>
+    <div style="font-family:Grandstander,cursive;font-size:15px;font-weight:800;margin-bottom:10px" id="qD">Loading…</div>
+    <div id="qScene" style="display:flex;gap:8px;flex-wrap:wrap;background:rgba(0,0,0,.02);border-radius:14px;padding:12px;border:1.5px solid rgba(0,0,0,.06);margin-bottom:14px;align-items:flex-start"></div>
+    <div class="opts" id="qO"></div>
+    <div class="fb" id="qF"></div>
+    <button class="nbtn" onclick="nwDQ()">Next →</button>
   </div>
 </div>
 
+</div>
 <script>
-/* ── Tab switching ── */
-function sw(n){
-  var names={learn:'Share',practice:'Quiz'};
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.textContent===names[n]);});
-  document.querySelectorAll('.pnl').forEach(function(p){var a=p.id==='p-'+n;p.classList.toggle('on',a);p.style.display=a?'flex':'none';});
-}
+function sw(n){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.textContent.toLowerCase()===n)});document.querySelectorAll('.pnl').forEach(function(p){var a=p.id==='p-'+n;p.classList.toggle('on',a);p.style.display=a?'flex':'none'})}
 document.getElementById('p-practice').style.display='none';
+function pool4(ans,lo,hi){var s=new Set([ans]);var i=0;while(s.size<4&&i<50){i++;var w=ans+Math.round(Math.random()*8-4);if(w>=lo&&w<=hi&&w!==ans)s.add(w)}return[...s].sort(function(){return Math.random()-.5})}
+function mkOpts(cid,items,correct,fid){var c=document.getElementById(cid);c.innerHTML='';items.forEach(function(n){var b=document.createElement('button');b.className='opt';b.textContent=n;b.onclick=function(){c.querySelectorAll('.opt').forEach(function(x){x.onclick=null});var fb=document.getElementById(fid);if(String(n)===String(correct)){b.classList.add('ok');fb.textContent='🎉 Correct!';fb.style.color='var(--ok)'}else{b.classList.add('no');fb.textContent='The answer is '+correct+'.';fb.style.color='var(--no)';c.querySelectorAll('.opt').forEach(function(x){if(String(x.textContent)===String(correct))x.classList.add('ok')})}};c.appendChild(b)})}
 
-/* ── Share activity ── */
-const SWEETS=['🍬','🍭','🧁','🍩','🍪','🍡','🍦','⭐'];
-var numItems=12,numBoxes=3,selItem=null,boxContents=[],sweet='🍬';
+var OBJS=['🍬','🍭','🧁','🍩','🍪','⭐','🎈','🏅','🍎','🌸'];
+var nItems=12, nGroups=3, selIdx=null, boxContents=[], curObj='🍬';
 
-function chSetup(d,v){
-  if(d==='items')numItems=Math.max(2,Math.min(20,numItems+v));
-  else numBoxes=Math.max(2,Math.min(6,numBoxes+v));
-  document.getElementById('itemsVal').textContent=numItems;
-  document.getElementById('boxesVal').textContent=numBoxes;
+function chS(d,v){
+  if(d==='n')nItems=Math.max(2,Math.min(20,nItems+v));
+  else nGroups=Math.max(2,Math.min(6,nGroups+v));
+  document.getElementById('nVal').textContent=nItems;
+  document.getElementById('gVal').textContent=nGroups;
 }
 
-function startSharing(){
-  sweet=SWEETS[Math.floor(Math.random()*SWEETS.length)];
-  boxContents=Array.from({length:numBoxes},function(){return[];});
-  selItem=null;
-  document.getElementById('resultEq').textContent='';
-  document.getElementById('resultWords').textContent='';
-  document.getElementById('resultPraise').textContent='';
-  buildPool();buildBoxes();updatePoolCnt();
+function startS(){
+  curObj=OBJS[Math.floor(Math.random()*OBJS.length)];
+  boxContents=Array.from({length:nGroups},function(){return[]});
+  selIdx=null;
+  document.getElementById('result').innerHTML='';
+  bldPool();bldBoxes();updCnt();
 }
 
-function buildPool(){
-  var pool=document.getElementById('itemPool');pool.innerHTML='';
-  for(var i=0;i<numItems;i++){
-    var s=document.createElement('span');s.className='sweet';s.textContent=sweet;s.dataset.idx=i;
-    s.onclick=(function(idx){return function(){selectItem(idx);};})(i);
-    pool.appendChild(s);
+function bldPool(){
+  var el=document.getElementById('pool');el.innerHTML='';
+  for(var i=0;i<nItems;i++){
+    var s=document.createElement('span');
+    s.style.cssText='font-size:30px;cursor:pointer;user-select:none;transition:all .18s;line-height:1;border-radius:8px;padding:3px;display:inline-block';
+    s.textContent=curObj;s.dataset.i=i;
+    (function(idx){s.onclick=function(){
+      if(s.classList.contains('used'))return;
+      selIdx=(selIdx===idx?null:idx);updPool();
+    }})(i);
+    el.appendChild(s);
   }
 }
 
-function selectItem(idx){
-  if(selItem===idx){selItem=null;updatePool();return;}
-  var s=document.querySelector('.sweet[data-idx="'+idx+'"]');
-  if(s&&s.classList.contains('used'))return;
-  selItem=idx;updatePool();
-}
-
-function updatePool(){
-  document.querySelectorAll('.sweet:not(.used)').forEach(function(s){
-    var i=parseInt(s.dataset.idx);s.classList.toggle('selected',i===selItem);
+function updPool(){
+  document.querySelectorAll('#pool span:not(.used)').forEach(function(s){
+    var i=parseInt(s.dataset.i);
+    var sel=i===selIdx;
+    s.style.background=sel?'rgba(0,0,0,.08)':'';
+    s.style.transform=sel?'scale(1.18)':'';
+    s.style.outline=sel?'2px solid var(--ac)':'none';
   });
 }
 
-function updatePoolCnt(){
+function updCnt(){
   var placed=boxContents.reduce(function(a,b){return a+b.length},0);
-  document.getElementById('poolCnt').textContent='('+placed+' placed, '+(numItems-placed)+' left)';
+  document.getElementById('poolCnt').textContent='('+placed+' placed, '+(nItems-placed)+' left)';
 }
 
-function buildBoxes(){
-  var row=document.getElementById('boxesRow');row.innerHTML='';
-  for(var b=0;b<numBoxes;b++){
-    var wrap=document.createElement('div');wrap.className='box-wrap';
-    var lbl=document.createElement('div');lbl.className='box-lbl';lbl.textContent='Box '+(b+1);
-    var box=document.createElement('div');box.className='box';
-    box.innerHTML='<span class="box-ph">Tap to place</span>';
-    box.onclick=(function(bi){return function(){giveToBox(bi);};})(b);
-    var cnt=document.createElement('div');cnt.className='box-count';cnt.id='bc'+b;cnt.textContent='0';
-    wrap.appendChild(lbl);wrap.appendChild(box);wrap.appendChild(cnt);row.appendChild(wrap);
+function bldBoxes(){
+  var el=document.getElementById('boxes');el.innerHTML='';
+  for(var b=0;b<nGroups;b++){
+    var wrap=document.createElement('div');wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:6px';
+    var lbl=document.createElement('div');lbl.style.cssText='font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2)';lbl.textContent='Box '+(b+1);
+    var box=document.createElement('div');
+    box.style.cssText='min-width:80px;min-height:80px;background:rgba(0,0,0,.02);border:2px dashed rgba(0,0,0,.1);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;cursor:pointer;transition:.18s';
+    box.innerHTML='<span style="font-size:10px;color:rgba(0,0,0,.2);font-weight:700;width:100%;text-align:center;padding-top:6px">tap to place</span>';
+    (function(bx){box.onmouseenter=function(){box.style.borderColor='var(--ac)'};box.onmouseleave=function(){box.style.borderColor='rgba(0,0,0,.1)'};box.onclick=function(){giveToBox(bx)}})(b);
+    var cnt=document.createElement('div');cnt.style.cssText='font-family:Grandstander,cursive;font-size:22px;font-weight:900;color:var(--ac)';cnt.id='bc'+b;cnt.textContent='0';
+    wrap.appendChild(lbl);wrap.appendChild(box);wrap.appendChild(cnt);el.appendChild(wrap);
   }
 }
 
 function giveToBox(b){
-  if(selItem===null){
-    var rw=document.getElementById('resultWords');rw.textContent='Select an item first!';rw.style.color='var(--no)';return;
-  }
-  var s=document.querySelector('.sweet[data-idx="'+selItem+'"]');if(s)s.classList.add('used');
-  boxContents[b].push(selItem);selItem=null;updatePool();
-  var box=document.querySelectorAll('.box')[b];
-  var ph=box.querySelector('.box-ph');if(ph)ph.remove();
-  var em=document.createElement('span');em.className='box-sweet';em.textContent=sweet;box.appendChild(em);
+  if(selIdx===null){document.getElementById('result').innerHTML='<div style="font-size:13px;font-weight:600;color:var(--no)">Tap an object first!</div>';return}
+  var s=document.querySelector('#pool span[data-i="'+selIdx+'"]');
+  if(s){s.classList.add('used');s.style.cssText='font-size:30px;line-height:1;opacity:.15;filter:grayscale(1);pointer-events:none;padding:3px'}
+  boxContents[b].push(selIdx);selIdx=null;updPool();
+  var box=document.querySelectorAll('#boxes .\\:not(lbl)');
+  var boxes=document.querySelectorAll('#boxes div > div[style*="min-width:80px"]');
+  if(boxes[b]){var ph=boxes[b].querySelector('span');if(ph)ph.remove();var em=document.createElement('span');em.style.cssText='font-size:20px;line-height:1;animation:pop .2s';em.textContent=curObj;boxes[b].appendChild(em)}
   document.getElementById('bc'+b).textContent=boxContents[b].length;
-  updatePoolCnt();checkDone();
+  updCnt();chkDone();
 }
 
-function checkDone(){
+function chkDone(){
   var placed=boxContents.reduce(function(a,b){return a+b.length},0);
-  document.getElementById('resultWords').textContent='';
-  if(placed<numItems)return;
+  if(placed<nItems)return;
   var counts=boxContents.map(function(b){return b.length});
   var equal=counts.every(function(c){return c===counts[0]});
-  var each=counts[0];
-  var eq=document.getElementById('resultEq');
-  var rw=document.getElementById('resultWords');
-  var rp=document.getElementById('resultPraise');
-  eq.innerHTML=numItems+' ÷ '+numBoxes+' = <span class="ans">'+each+'</span>';
+  var res=document.getElementById('result');
   if(equal){
-    rw.textContent=numItems+' items ÷ '+numBoxes+' boxes = '+each+' each.';
-    rw.style.color='var(--ok)';
-    rp.textContent='🎉 Perfectly equal — every box got '+each+'!';
+    res.innerHTML='<div style="font-family:Grandstander,cursive;font-size:28px;font-weight:900;color:var(--ac)">'+nItems+' ÷ '+nGroups+' = '+counts[0]+'</div>'
+      +'<div style="font-size:13px;font-weight:700;color:var(--ok);margin-top:6px">🎉 Every group got exactly '+counts[0]+'! Perfectly equal!</div>';
   } else {
-    eq.innerHTML='';
-    rw.textContent='Not equal — boxes have: '+counts.join(', ')+'. Try rearranging!';
-    rw.style.color='var(--no)';
-    rp.textContent='';
+    res.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--no)">Not equal — groups have: '+counts.join(', ')+'. Try pressing Start again.</div>';
   }
 }
+startS();
 
-startSharing();
-
-/* ── Quiz ── */
-const QUIZ_OBJ=['🍬','🍪','⭐','🔵','🍎','🌸','🎈','🏅'];
-var qAns=0,qBoxN=0;
-
-function newQuiz(){
-  var totals=[6,8,9,10,12,15];
-  var total=totals[Math.floor(Math.random()*totals.length)];
-  var divBy=[2,3][Math.floor(Math.random()*2)];
-  if(total%divBy!==0){newQuiz();return;}
-  qAns=total/divBy;qBoxN=divBy;
-  var em=QUIZ_OBJ[Math.floor(Math.random()*QUIZ_OBJ.length)];
-  document.getElementById('quizQ').textContent=total+' objects shared equally into '+divBy+' boxes. How many in each box?';
-  document.getElementById('qFb').textContent='';
-
-  var scene=document.getElementById('quizScene');scene.innerHTML='';
+/* Practice quiz */
+var QOBJS=['🍬','🍪','⭐','🍎','🌸','🎈','🏅','🔵'];
+var qA=0, qN=0;
+function nwDQ(){
+  var totals=[4,6,8,9,10,12,15];var divs=[2,3,4,5];
+  var tries=0,total,divBy;
+  do{total=totals[Math.floor(Math.random()*totals.length)];divBy=divs[Math.floor(Math.random()*divs.length)];tries++}while(total%divBy!==0&&tries<50);
+  if(total%divBy!==0){total=12;divBy=3}
+  qA=total/divBy;qN=divBy;
+  var em=QOBJS[Math.floor(Math.random()*QOBJS.length)];
+  document.getElementById('qD').textContent=total+' objects shared equally into '+divBy+' groups. How many in each group?';
+  document.getElementById('qF').textContent='';
+  var sc=document.getElementById('qScene');sc.innerHTML='';
   for(var b=0;b<divBy;b++){
-    var box=document.createElement('div');box.className='quiz-box';
-    for(var i=0;i<qAns;i++){var s=document.createElement('span');s.style.fontSize='17px';s.textContent=em;box.appendChild(s);}
-    scene.appendChild(box);
+    var box=document.createElement('div');
+    box.style.cssText='background:#fff;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;min-width:60px;min-height:54px';
+    for(var i=0;i<qA;i++){var s=document.createElement('span');s.style.fontSize='18px';s.textContent=em;box.appendChild(s)}
+    sc.appendChild(box);
   }
-
-  var pool=new Set([qAns]);var safety=0;
-  while(pool.size<4&&safety<50){safety++;var w=qAns+[-2,-1,1,2][Math.floor(Math.random()*4)];if(w>0&&w<=10)pool.add(w);}
-  var opts=document.getElementById('qOpts');opts.innerHTML='';
+  var pool=new Set([qA]);var t=0;
+  while(pool.size<4&&t<40){t++;var w=qA+[-2,-1,1,2][Math.floor(Math.random()*4)];if(w>0&&w<=10)pool.add(w)}
+  var op=document.getElementById('qO');op.innerHTML='';
   [...pool].sort(function(){return Math.random()-.5}).forEach(function(n){
     var b=document.createElement('button');b.className='opt';b.textContent=n;
-    b.onclick=function(){
-      opts.querySelectorAll('.opt').forEach(function(x){x.onclick=null;});
-      var fb=document.getElementById('qFb');
-      if(n===qAns){
-        b.classList.add('ok');fb.textContent='🎉 Yes! '+total+' ÷ '+qBoxN+' = '+qAns+' in each box.';fb.style.color='var(--ok)';
-      } else {
-        b.classList.add('no');fb.textContent='Count the objects in one box. The answer is '+qAns+'.';fb.style.color='var(--no)';
-        opts.querySelectorAll('.opt').forEach(function(x){if(parseInt(x.textContent)===qAns)x.classList.add('ok');});
-      }
-    };
-    opts.appendChild(b);
+    b.onclick=function(){op.querySelectorAll('.opt').forEach(function(x){x.onclick=null});var fb=document.getElementById('qF');
+      if(n===qA){b.classList.add('ok');fb.textContent='🎉 Correct! '+total+' ÷ '+qN+' = '+qA;fb.style.color='var(--ok)'}
+      else{b.classList.add('no');fb.textContent='Count ONE group carefully. Answer: '+qA;fb.style.color='var(--no)';op.querySelectorAll('.opt').forEach(function(x){if(parseInt(x.textContent)===qA)x.classList.add('ok')})}};
+    op.appendChild(b);
   });
 }
-newQuiz();
+nwDQ();
+
 </script>
 </body>
 </html>
