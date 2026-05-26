@@ -4,220 +4,296 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapter 14 · Division Readiness</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--pink:#FF4FA0;--pink2:#E03088;--rose:#FFE4EF;--red:#FF3B3B;--purple:#9B5DE5;--cream:#FFF5FC;--green:#2D9E44;--blue:#3B82F6}
-html,body{width:100%;min-height:100vh}
-body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#FF4FA0 0%,#E03088 30%,#C22070 60%,#FF8EC8 100%);min-height:100vh;padding:0 0 32px;display:flex;flex-direction:column;align-items:center;}
+:root{--ac:#7C3AED;--bg:#FDF6EE;--card:#fff;--ink:#1A1A2E;--ink2:#6B6B8A;--ok:#16A34A;--no:#DC2626;--r:20px}
+html,body{width:100%;min-height:100vh;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
 
-/* confetti */
-.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.conf{position:absolute;border-radius:2px;animation:fall var(--d,4s) linear infinite;opacity:.8}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0)}100%{transform:translateY(110vh) rotate(540deg)}}
+/* ── Header ── */
+.hdr{width:100%;position:sticky;top:0;z-index:100;background:var(--ac);box-shadow:0 4px 24px rgba(0,0,0,.15)}
+.hdr-in{max-width:640px;margin:0 auto;padding:14px 20px 0;text-align:center}
+.ch-n{font-family:'Grandstander',cursive;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.ch-t{font-family:'Grandstander',cursive;font-size:clamp(18px,5vw,26px);font-weight:900;color:#fff;line-height:1.2;margin:2px 0 10px;text-shadow:0 2px 8px rgba(0,0,0,.1)}
+.tabs{display:flex;gap:4px;max-width:280px;margin:0 auto;background:rgba(0,0,0,.1);border-radius:14px 14px 0 0;padding:4px 4px 0}
+.tab{flex:1;padding:9px 0;text-align:center;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;cursor:pointer;border-radius:12px 12px 0 0;color:rgba(255,255,255,.6);transition:.2s;user-select:none}
+.tab.on{background:var(--bg);color:var(--ac)}
+.tab:not(.on):hover{color:#fff;background:rgba(255,255,255,.08)}
 
-.party-header{width:100%;background:linear-gradient(135deg,#C22070,#FF4FA0);padding:14px 20px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid #FFB3D9;position:relative;overflow:hidden;z-index:10}
-.banner-text{font-family:'Fredoka One',cursive;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);position:absolute;bottom:4px;left:0;right:0;text-align:center}
-.ph-title{font-family:'Fredoka One',cursive;font-size:26px;color:#fff;z-index:1;text-shadow:0 2px 0 rgba(0,0,0,.2)}
-.ph-chip{background:#FFD43B;color:#3A2A00;font-size:12px;font-weight:900;padding:5px 14px;border-radius:20px;z-index:1;border:2px solid rgba(255,255,255,.3)}
+/* ── Layout ── */
+.page{max-width:620px;margin:0 auto;padding:14px 14px 60px}
+.pnl{display:none;flex-direction:column;gap:16px}.pnl.on{display:flex}
+.card{background:var(--card);border-radius:var(--r);padding:20px 18px;box-shadow:0 3px 16px rgba(0,0,0,.06);position:relative;overflow:hidden}
+.cb{position:absolute;top:0;left:0;bottom:0;width:5px;border-radius:var(--r) 0 0 var(--r);background:var(--ac)}
+.ct{font-family:'Grandstander',cursive;font-size:15px;font-weight:800;padding-left:14px;margin-bottom:3px;line-height:1.3}
+.cs{font-size:12px;color:var(--ink2);padding-left:14px;margin-bottom:16px;line-height:1.6}
 
-.page{width:100%;max-width:700px;padding:16px;display:flex;flex-direction:column;gap:20px;position:relative;z-index:5}
-.pcard{background:rgba(255,245,252,.97);border-radius:24px;padding:20px;box-shadow:0 6px 0 rgba(0,0,0,.15),0 2px 20px rgba(0,0,0,.1);border:3px solid rgba(255,255,255,.9);position:relative;overflow:hidden}
-.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;border-radius:24px 24px 0 0}
-.pcard.pink::before{background:var(--pink)}.pcard.purple::before{background:var(--purple)}.pcard.green::before{background:var(--green)}
-.pc-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--pink2);margin-bottom:4px}
-.hint{font-size:13px;font-weight:700;color:var(--pink2);margin-bottom:14px;line-height:1.5}
+/* ── Setup strip ── */
+.setup-strip{display:flex;gap:12px;flex-wrap:wrap;background:rgba(0,0,0,.02);border-radius:14px;padding:12px 14px;margin-bottom:16px;border:1.5px solid rgba(0,0,0,.06);align-items:center}
+.cg{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:8px 12px;border:1.5px solid rgba(0,0,0,.07)}
+.cg-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);min-width:48px}
+.sb{width:32px;height:32px;border-radius:50%;border:none;background:var(--ac);color:#fff;font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.sb:active{transform:scale(.88)}
+.sv{font-family:'Grandstander',cursive;font-size:26px;font-weight:900;min-width:30px;text-align:center;color:var(--ink)}
+.start-btn{font-family:'Grandstander',cursive;font-size:13px;font-weight:800;padding:9px 20px;border-radius:12px;border:none;background:var(--ac);color:#fff;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.12);transition:.15s;margin-left:auto}
+.start-btn:hover{transform:translateY(-1px);opacity:.9}
 
-/* Setup controls */
-.setup-strip{display:flex;gap:14px;flex-wrap:wrap;background:var(--rose);border-radius:16px;padding:12px 16px;margin-bottom:14px;align-items:center}
-.cg{display:flex;align-items:center;gap:8px}
-.cg-lbl{font-family:'Fredoka One',cursive;font-size:14px;color:var(--pink2)}
-.sbtn{width:36px;height:36px;border-radius:50%;border:none;background:var(--pink);color:#fff;font-size:18px;font-weight:900;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(0,0,0,.12)}
-.sbtn:active{transform:scale(.88)}
-.sval{font-family:'Fredoka One',cursive;font-size:28px;color:var(--pink2);min-width:32px;text-align:center}
-.start-btn{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border:none;border-radius:14px;padding:10px 22px;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.12);transition:all .18s;margin-left:auto}
-.start-btn:hover{transform:scale(1.06)}
-
-/* Pool */
-.pool-lbl{font-family:'Fredoka One',cursive;font-size:13px;color:var(--pink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
-.item-pool{min-height:70px;background:var(--rose);border-radius:16px;border:2.5px dashed #FFB3D9;padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:16px}
-.sweet{font-size:32px;cursor:pointer;user-select:none;transition:all .18s;line-height:1;border-radius:8px;padding:2px}
-.sweet:hover{transform:scale(1.22) rotate(6deg);background:var(--rose)}
-.sweet.selected{background:#FFB3D9;border:2px solid var(--pink);transform:scale(1.18);animation:wiggle .3s}
-@keyframes wiggle{0%,100%{transform:scale(1.18) rotate(0)}25%{transform:scale(1.18) rotate(-8deg)}75%{transform:scale(1.18) rotate(8deg)}}
+/* ── Item pool ── */
+.pool-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px}
+.item-pool{min-height:64px;background:rgba(0,0,0,.02);border-radius:14px;border:1.5px dashed rgba(0,0,0,.1);padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:16px}
+.sweet{font-size:30px;cursor:pointer;user-select:none;transition:all .15s;line-height:1;border-radius:8px;padding:3px;border:2px solid transparent}
+.sweet:hover{transform:scale(1.2);background:rgba(0,0,0,.04)}
+.sweet.selected{background:rgba(124,58,237,.1);border-color:var(--ac);transform:scale(1.15)}
 .sweet.used{opacity:.18;pointer-events:none;filter:grayscale(1)}
 
-/* Boxes row */
-.boxes-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
-.box-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-.box-lbl{font-family:'Fredoka One',cursive;font-size:12px;color:var(--pink2);text-transform:uppercase;letter-spacing:.06em}
-.box{
-  min-width:90px;min-height:90px;background:var(--rose);
-  border:3px solid #FFB3D9;border-radius:16px;
-  padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;
-  cursor:pointer;transition:all .18s;
-}
-.box:hover{border-color:var(--pink);background:#FFE4EF;transform:scale(1.03)}
-.box.active{border-color:var(--pink);background:#FFE4EF}
-.box-ph{font-size:11px;color:#FFB3D9;font-weight:700;text-align:center;width:100%;padding-top:10px;pointer-events:none}
-.box-sweet{font-size:22px;line-height:1;animation:sweetDrop .2s cubic-bezier(.36,1.6,.6,1)}
+/* ── Boxes row ── */
+.boxes-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.box-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
+.box-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink2)}
+.box{min-width:88px;min-height:88px;background:rgba(0,0,0,.02);border:2px solid rgba(0,0,0,.1);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;cursor:pointer;transition:all .15s}
+.box:hover{border-color:var(--ac);background:rgba(124,58,237,.05);transform:scale(1.03)}
+.box-ph{font-size:11px;color:var(--ink2);font-weight:600;text-align:center;width:100%;padding-top:10px;pointer-events:none;opacity:.5}
+.box-sweet{font-size:20px;line-height:1;animation:sweetDrop .2s cubic-bezier(.36,1.6,.6,1)}
 @keyframes sweetDrop{from{transform:scale(0) translateY(-8px)}to{transform:scale(1)}}
-.box-count{font-family:'Fredoka One',cursive;font-size:22px;color:var(--pink2)}
+.box-count{font-family:'Grandstander',cursive;font-size:20px;font-weight:900;color:var(--ac)}
 
-/* Result */
-.result-panel{background:var(--rose);border-radius:16px;padding:14px 16px;text-align:center}
-.result-eq{font-family:'Fredoka One',cursive;font-size:30px;color:var(--pink2);min-height:38px;margin-bottom:6px}
-.result-eq .ans{color:var(--green);font-size:38px}
-.result-words{font-size:15px;font-weight:800;color:var(--pink2);min-height:22px;margin-bottom:4px}
-.result-praise{font-family:'Fredoka One',cursive;font-size:20px;color:var(--green);min-height:26px}
+/* ── Result panel ── */
+.result-panel{background:rgba(0,0,0,.02);border-radius:14px;padding:14px 16px;border:1.5px solid rgba(0,0,0,.06);text-align:center;min-height:70px}
+.result-eq{font-family:'Grandstander',cursive;font-size:28px;font-weight:900;color:var(--ink);min-height:36px;margin-bottom:5px}
+.result-eq .ans{color:var(--ok)}
+.result-words{font-size:13px;font-weight:700;min-height:20px;margin-bottom:4px}
+.result-praise{font-family:'Grandstander',cursive;font-size:18px;font-weight:800;min-height:24px;color:var(--ok)}
 
-/* Quiz */
-.quiz-scene{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px;background:var(--rose);border-radius:14px;padding:10px;border:2.5px dashed #FFB3D9}
-.quiz-box{min-width:70px;min-height:60px;background:#FFE4EF;border:2px solid #FFB3D9;border-radius:12px;padding:6px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start}
+/* ── Quiz scene ── */
+.quiz-scene{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px;background:rgba(0,0,0,.02);border-radius:14px;padding:12px;border:1.5px solid rgba(0,0,0,.06)}
+.quiz-box{min-width:65px;min-height:55px;background:#fff;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:6px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.qQ{font-family:'Grandstander',cursive;font-size:15px;font-weight:800;margin-bottom:12px;color:var(--ink)}
 .opts{display:flex;gap:8px;flex-wrap:wrap}
-.opt{font-family:'Fredoka One',cursive;font-size:22px;min-width:68px;height:54px;border-radius:14px;border:3px solid #FFB3D9;background:#fff;cursor:pointer;color:var(--pink2);transition:all .14s;padding:0 12px;box-shadow:0 3px 0 rgba(0,0,0,.08)}
-.opt:hover{border-color:var(--pink);transform:scale(1.06);background:var(--rose)}
-.opt.correct{background:#D1FAE5;border-color:var(--green);color:var(--green)}
-.opt.wrong{background:#FFE0E0;border-color:var(--red);color:var(--red)}
-.quiz-fb{font-family:'Fredoka One',cursive;font-size:17px;min-height:22px;margin-top:10px}
-.next-btn{margin-top:12px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border:none;border-radius:16px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.12);transition:all .18s}
-.next-btn:hover{transform:scale(1.06)}
+.opt{font-family:'Grandstander',cursive;font-size:22px;font-weight:800;min-width:68px;height:52px;border-radius:14px;border:2.5px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:0 10px}
+.opt:hover{border-color:var(--ac);transform:translateY(-2px)}
+.opt.ok{background:#DCFCE7;border-color:var(--ok);color:#15803D;animation:pop .3s}
+.opt.no{background:#FEE2E2;border-color:var(--no);color:var(--no);animation:shk .35s}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.fb{font-family:'Grandstander',cursive;font-size:14px;font-weight:700;min-height:20px;margin-top:10px}
+.nbtn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 24px;border-radius:14px;border:none;background:var(--ac);color:#fff;cursor:pointer;margin-top:12px;box-shadow:0 3px 10px rgba(0,0,0,.12);transition:.15s}
+.nbtn:hover{transform:translateY(-1px);opacity:.9}
+.btn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn-g{background:#fff;color:var(--ink2);border:1.5px solid rgba(0,0,0,.1)}
+.btn-g:hover{border-color:var(--ac);color:var(--ac)}
 </style>
 </head>
 <body>
 
-<!-- confetti -->
-<div class="confetti-wrap" id="confettiWrap"></div>
-
-<div class="party-header">
-  <div class="banner-text">🎉 sharing is caring • division readiness 🎉</div>
-  <div class="ph-title">🎉 Division Readiness</div>
-  <div class="ph-chip">Chapter 14</div>
-</div>
+<div class="hdr"><div class="hdr-in">
+  <div class="ch-n">Chapter 14</div>
+  <div class="ch-t">Division Readiness</div>
+  <div class="tabs">
+    <div class="tab on" onclick="sw('learn')">Share</div>
+    <div class="tab" onclick="sw('practice')">Quiz</div>
+  </div>
+</div></div>
 
 <div class="page">
 
-  <div class="pcard pink">
-    <div class="pc-title">🍬 Share sweets equally into boxes!</div>
-    <div class="hint">Choose how many sweets and how many boxes. Tap a sweet to select it (it glows!), then tap a box to share it there. Make sure every box gets the SAME number!</div>
-    <div class="setup-strip">
-      <div class="cg"><span class="cg-lbl">Sweets:</span><button class="sbtn" onclick="chSetup('items',-1)">−</button><span class="sval" id="itemsVal">12</span><button class="sbtn" onclick="chSetup('items',1)">+</button></div>
-      <div class="cg"><span class="cg-lbl">Boxes:</span><button class="sbtn" onclick="chSetup('boxes',-1)">−</button><span class="sval" id="boxesVal">3</span><button class="sbtn" onclick="chSetup('boxes',1)">+</button></div>
-      <button class="start-btn" onclick="startSharing()">Start sharing ▶</button>
+  <!-- ── LEARN panel ── -->
+  <div class="pnl on" id="p-learn">
+
+    <div class="card"><div class="cb"></div>
+      <div class="ct">Share items equally into boxes</div>
+      <div class="cs">Choose how many items and boxes. Tap an item to select it — it will glow. Then tap a box to place it there. Every box must end up with the same number!</div>
+
+      <div class="setup-strip">
+        <div class="cg">
+          <span class="cg-lbl">Items</span>
+          <button class="sb" onclick="chSetup('items',-1)">−</button>
+          <span class="sv" id="itemsVal">12</span>
+          <button class="sb" onclick="chSetup('items',1)">+</button>
+        </div>
+        <div class="cg">
+          <span class="cg-lbl">Boxes</span>
+          <button class="sb" onclick="chSetup('boxes',-1)">−</button>
+          <span class="sv" id="boxesVal">3</span>
+          <button class="sb" onclick="chSetup('boxes',1)">+</button>
+        </div>
+        <button class="start-btn" onclick="startSharing()">Start ▶</button>
+      </div>
+
+      <div class="pool-lbl">Items to share <span id="poolCnt" style="font-weight:900;color:var(--ac)"></span></div>
+      <div class="item-pool" id="itemPool"></div>
+
+      <div class="pool-lbl" style="margin-bottom:10px">Share into these boxes</div>
+      <div class="boxes-row" id="boxesRow"></div>
+
+      <div class="result-panel">
+        <div class="result-eq" id="resultEq"></div>
+        <div class="result-words" id="resultWords"></div>
+        <div class="result-praise" id="resultPraise"></div>
+      </div>
     </div>
-    <div class="pool-lbl">Sweets to share <span id="poolCnt"></span>:</div>
-    <div class="item-pool" id="itemPool"></div>
-    <div style="font-family:'Fredoka One',cursive;font-size:13px;color:var(--pink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Share into these boxes:</div>
-    <div class="boxes-row" id="boxesRow"></div>
-    <div class="result-panel">
-      <div class="result-eq" id="resultEq"></div>
-      <div class="result-words" id="resultWords"></div>
-      <div class="result-praise" id="resultPraise"></div>
-    </div>
+
   </div>
 
-  <div class="pcard purple">
-    <div class="pc-title">🔢 How many in each box?</div>
-    <div class="hint">Look at the sweets shared equally into boxes. Count how many are in ONE box. Pick the right answer!</div>
-    <div style="font-family:'Fredoka One',cursive;font-size:17px;color:var(--pink2);margin-bottom:8px" id="quizQ">Loading…</div>
-    <div class="quiz-scene" id="quizScene"></div>
-    <div class="opts" id="qOpts"></div>
-    <div class="quiz-fb" id="qFb"></div>
-    <button class="next-btn" onclick="newQuiz()">Next question ➡️</button>
-  </div>
+  <!-- ── PRACTICE panel ── -->
+  <div class="pnl" id="p-practice">
 
+    <div class="card"><div class="cb"></div>
+      <div class="ct">How many in each box?</div>
+      <div class="cs">Look at the items shared equally across the boxes. Count how many are in one box, then pick the right answer.</div>
+      <div class="qQ" id="quizQ">Loading…</div>
+      <div class="quiz-scene" id="quizScene"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="fb" id="qFb"></div>
+      <button class="nbtn" onclick="newQuiz()">Next question →</button>
+    </div>
+
+  </div>
 </div>
 
 <script>
-/* Confetti */
-const cw=document.getElementById('confettiWrap');const COLORS=['#FF4FA0','#FFD43B','#9B5DE5','#3B82F6','#FF3B3B','#2D9E44'];
-for(let i=0;i<30;i++){const c=document.createElement('div');c.className='conf';const sz=4+Math.random()*8;c.style.cssText=`width:${sz}px;height:${sz*1.5}px;left:${Math.random()*100}%;background:${COLORS[Math.floor(Math.random()*COLORS.length)]};--d:${3+Math.random()*4}s;animation-delay:${Math.random()*4}s;transform:rotate(${Math.random()*360}deg)`;cw.appendChild(c);}
+/* ── Tab switching ── */
+function sw(n){
+  var names={learn:'Share',practice:'Quiz'};
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.textContent===names[n]);});
+  document.querySelectorAll('.pnl').forEach(function(p){var a=p.id==='p-'+n;p.classList.toggle('on',a);p.style.display=a?'flex':'none';});
+}
+document.getElementById('p-practice').style.display='none';
 
-const SWEETS=['🍬','🍭','🧁','🍩','🍪','🍡','🍦','🎂'];
-let numItems=12,numBoxes=3,selItem=null,boxContents=[],sweet='🍬';
+/* ── Share activity ── */
+const SWEETS=['🍬','🍭','🧁','🍩','🍪','🍡','🍦','⭐'];
+var numItems=12,numBoxes=3,selItem=null,boxContents=[],sweet='🍬';
 
 function chSetup(d,v){
-  if(d==='items')numItems=Math.max(2,Math.min(20,numItems+v));else numBoxes=Math.max(2,Math.min(6,numBoxes+v));
-  document.getElementById('itemsVal').textContent=numItems;document.getElementById('boxesVal').textContent=numBoxes;
+  if(d==='items')numItems=Math.max(2,Math.min(20,numItems+v));
+  else numBoxes=Math.max(2,Math.min(6,numBoxes+v));
+  document.getElementById('itemsVal').textContent=numItems;
+  document.getElementById('boxesVal').textContent=numBoxes;
 }
+
 function startSharing(){
-  sweet=SWEETS[Math.floor(Math.random()*SWEETS.length)];boxContents=Array.from({length:numBoxes},()=>[]);selItem=null;
-  document.getElementById('resultEq').textContent='';document.getElementById('resultWords').textContent='';document.getElementById('resultPraise').textContent='';
+  sweet=SWEETS[Math.floor(Math.random()*SWEETS.length)];
+  boxContents=Array.from({length:numBoxes},function(){return[];});
+  selItem=null;
+  document.getElementById('resultEq').textContent='';
+  document.getElementById('resultWords').textContent='';
+  document.getElementById('resultPraise').textContent='';
   buildPool();buildBoxes();updatePoolCnt();
 }
+
 function buildPool(){
-  const pool=document.getElementById('itemPool');pool.innerHTML='';
-  for(let i=0;i<numItems;i++){const s=document.createElement('span');s.className='sweet';s.textContent=sweet;s.dataset.idx=i;s.onclick=()=>selectItem(i);pool.appendChild(s);}
+  var pool=document.getElementById('itemPool');pool.innerHTML='';
+  for(var i=0;i<numItems;i++){
+    var s=document.createElement('span');s.className='sweet';s.textContent=sweet;s.dataset.idx=i;
+    s.onclick=(function(idx){return function(){selectItem(idx);};})(i);
+    pool.appendChild(s);
+  }
 }
+
 function selectItem(idx){
   if(selItem===idx){selItem=null;updatePool();return;}
-  const s=document.querySelector(`.sweet[data-idx="${idx}"]`);if(s&&s.classList.contains('used'))return;
+  var s=document.querySelector('.sweet[data-idx="'+idx+'"]');
+  if(s&&s.classList.contains('used'))return;
   selItem=idx;updatePool();
 }
-function updatePool(){document.querySelectorAll('.sweet:not(.used)').forEach(s=>{const i=parseInt(s.dataset.idx);s.classList.toggle('selected',i===selItem);});}
-function updatePoolCnt(){const placed=boxContents.reduce((a,b)=>a+b.length,0);document.getElementById('poolCnt').textContent='('+placed+' placed, '+(numItems-placed)+' left)';}
+
+function updatePool(){
+  document.querySelectorAll('.sweet:not(.used)').forEach(function(s){
+    var i=parseInt(s.dataset.idx);s.classList.toggle('selected',i===selItem);
+  });
+}
+
+function updatePoolCnt(){
+  var placed=boxContents.reduce(function(a,b){return a+b.length},0);
+  document.getElementById('poolCnt').textContent='('+placed+' placed, '+(numItems-placed)+' left)';
+}
+
 function buildBoxes(){
-  const row=document.getElementById('boxesRow');row.innerHTML='';
-  for(let b=0;b<numBoxes;b++){
-    const wrap=document.createElement('div');wrap.className='box-wrap';
-    const lbl=document.createElement('div');lbl.className='box-lbl';lbl.textContent='Box '+(b+1);
-    const box=document.createElement('div');box.className='box';box.innerHTML='<span class="box-ph">Tap to share!</span>';
-    box.onclick=()=>giveToBox(b);
-    const cnt=document.createElement('div');cnt.className='box-count';cnt.id='bc'+b;cnt.textContent='0';
+  var row=document.getElementById('boxesRow');row.innerHTML='';
+  for(var b=0;b<numBoxes;b++){
+    var wrap=document.createElement('div');wrap.className='box-wrap';
+    var lbl=document.createElement('div');lbl.className='box-lbl';lbl.textContent='Box '+(b+1);
+    var box=document.createElement('div');box.className='box';
+    box.innerHTML='<span class="box-ph">Tap to place</span>';
+    box.onclick=(function(bi){return function(){giveToBox(bi);};})(b);
+    var cnt=document.createElement('div');cnt.className='box-count';cnt.id='bc'+b;cnt.textContent='0';
     wrap.appendChild(lbl);wrap.appendChild(box);wrap.appendChild(cnt);row.appendChild(wrap);
   }
 }
+
 function giveToBox(b){
-  if(selItem===null){document.getElementById('resultWords').textContent='Select a sweet first!';document.getElementById('resultWords').style.color='var(--pink2)';return;}
-  const s=document.querySelector(`.sweet[data-idx="${selItem}"]`);if(s)s.classList.add('used');
+  if(selItem===null){
+    var rw=document.getElementById('resultWords');rw.textContent='Select an item first!';rw.style.color='var(--no)';return;
+  }
+  var s=document.querySelector('.sweet[data-idx="'+selItem+'"]');if(s)s.classList.add('used');
   boxContents[b].push(selItem);selItem=null;updatePool();
-  const box=document.querySelectorAll('.box')[b];const ph=box.querySelector('.box-ph');if(ph)ph.remove();
-  const em=document.createElement('span');em.className='box-sweet';em.textContent=sweet;box.appendChild(em);
+  var box=document.querySelectorAll('.box')[b];
+  var ph=box.querySelector('.box-ph');if(ph)ph.remove();
+  var em=document.createElement('span');em.className='box-sweet';em.textContent=sweet;box.appendChild(em);
   document.getElementById('bc'+b).textContent=boxContents[b].length;
   updatePoolCnt();checkDone();
 }
+
 function checkDone(){
-  const placed=boxContents.reduce((a,b)=>a+b.length,0);document.getElementById('resultWords').textContent='';
+  var placed=boxContents.reduce(function(a,b){return a+b.length},0);
+  document.getElementById('resultWords').textContent='';
   if(placed<numItems)return;
-  const counts=boxContents.map(b=>b.length);const equal=counts.every(c=>c===counts[0]);const each=counts[0];
-  document.getElementById('resultEq').innerHTML=numItems+' ÷ '+numBoxes+' = <span class="ans">'+each+'</span>';
+  var counts=boxContents.map(function(b){return b.length});
+  var equal=counts.every(function(c){return c===counts[0]});
+  var each=counts[0];
+  var eq=document.getElementById('resultEq');
+  var rw=document.getElementById('resultWords');
+  var rp=document.getElementById('resultPraise');
+  eq.innerHTML=numItems+' ÷ '+numBoxes+' = <span class="ans">'+each+'</span>';
   if(equal){
-    document.getElementById('resultWords').textContent=numItems+' sweets ÷ '+numBoxes+' boxes = '+each+' each!';
-    document.getElementById('resultPraise').textContent='🎉 Perfectly equal! Every box got '+each+'! ⭐';
-    document.getElementById('resultWords').style.color='var(--green)';
-    // burst confetti
-    const extra=document.getElementById('confettiWrap');
-    for(let i=0;i<20;i++){const c=document.createElement('div');c.className='conf';const sz=6+Math.random()*8;c.style.cssText=`width:${sz}px;height:${sz*1.5}px;left:${Math.random()*100}%;top:0;background:${COLORS[Math.floor(Math.random()*COLORS.length)]};--d:.8s;animation-duration:.8s;`;extra.appendChild(c);setTimeout(()=>c.remove(),2000);}
+    rw.textContent=numItems+' items ÷ '+numBoxes+' boxes = '+each+' each.';
+    rw.style.color='var(--ok)';
+    rp.textContent='🎉 Perfectly equal — every box got '+each+'!';
   } else {
-    document.getElementById('resultWords').textContent='Not equal! Boxes have: '+counts.join(', ')+'. Hmm, try again!';
-    document.getElementById('resultWords').style.color='var(--red)';
-    document.getElementById('resultPraise').textContent='';document.getElementById('resultEq').innerHTML='';
+    eq.innerHTML='';
+    rw.textContent='Not equal — boxes have: '+counts.join(', ')+'. Try rearranging!';
+    rw.style.color='var(--no)';
+    rp.textContent='';
   }
 }
+
 startSharing();
 
-/* Quiz */
-const QUIZ_OBJS=['🍬','🍪','⭐','🔵','🍎','🌸','🎈','🏅'];
-let qAns=0,qBoxN=0;
+/* ── Quiz ── */
+const QUIZ_OBJ=['🍬','🍪','⭐','🔵','🍎','🌸','🎈','🏅'];
+var qAns=0,qBoxN=0;
+
 function newQuiz(){
-  const total=[6,8,9,10,12,15][Math.floor(Math.random()*6)];
-  const divBy=[2,3][Math.floor(Math.random()*2)];
+  var totals=[6,8,9,10,12,15];
+  var total=totals[Math.floor(Math.random()*totals.length)];
+  var divBy=[2,3][Math.floor(Math.random()*2)];
   if(total%divBy!==0){newQuiz();return;}
   qAns=total/divBy;qBoxN=divBy;
-  const em=QUIZ_OBJS[Math.floor(Math.random()*QUIZ_OBJS.length)];
+  var em=QUIZ_OBJ[Math.floor(Math.random()*QUIZ_OBJ.length)];
   document.getElementById('quizQ').textContent=total+' objects shared equally into '+divBy+' boxes. How many in each box?';
   document.getElementById('qFb').textContent='';
-  const scene=document.getElementById('quizScene');scene.innerHTML='';
-  for(let b=0;b<divBy;b++){
-    const box=document.createElement('div');box.className='quiz-box';
-    for(let i=0;i<qAns;i++){const s=document.createElement('span');s.style.fontSize='18px';s.textContent=em;box.appendChild(s);}
+
+  var scene=document.getElementById('quizScene');scene.innerHTML='';
+  for(var b=0;b<divBy;b++){
+    var box=document.createElement('div');box.className='quiz-box';
+    for(var i=0;i<qAns;i++){var s=document.createElement('span');s.style.fontSize='17px';s.textContent=em;box.appendChild(s);}
     scene.appendChild(box);
   }
-  const pool=new Set([qAns]);while(pool.size<4){const w=qAns+[-2,-1,1,2][Math.floor(Math.random()*4)];if(w>0&&w<=10)pool.add(w);}
-  const opts=document.getElementById('qOpts');opts.innerHTML='';
-  [...pool].sort(()=>Math.random()-.5).forEach(n=>{
-    const b=document.createElement('button');b.className='opt';b.textContent=n;
-    b.onclick=()=>{document.querySelectorAll('#qOpts .opt').forEach(x=>x.onclick=null);const fb=document.getElementById('qFb');if(n===qAns){b.classList.add('correct');fb.textContent='🎉 Yes! '+total+' ÷ '+qBoxN+' = '+qAns+' in each box! ⭐';fb.style.color='var(--green)';}else{b.classList.add('wrong');fb.textContent='Count the objects in ONE box! Answer: '+qAns;fb.style.color='var(--red)';document.querySelectorAll('#qOpts .opt').forEach(x=>{if(parseInt(x.textContent)===qAns)x.classList.add('correct');});}};
+
+  var pool=new Set([qAns]);var safety=0;
+  while(pool.size<4&&safety<50){safety++;var w=qAns+[-2,-1,1,2][Math.floor(Math.random()*4)];if(w>0&&w<=10)pool.add(w);}
+  var opts=document.getElementById('qOpts');opts.innerHTML='';
+  [...pool].sort(function(){return Math.random()-.5}).forEach(function(n){
+    var b=document.createElement('button');b.className='opt';b.textContent=n;
+    b.onclick=function(){
+      opts.querySelectorAll('.opt').forEach(function(x){x.onclick=null;});
+      var fb=document.getElementById('qFb');
+      if(n===qAns){
+        b.classList.add('ok');fb.textContent='🎉 Yes! '+total+' ÷ '+qBoxN+' = '+qAns+' in each box.';fb.style.color='var(--ok)';
+      } else {
+        b.classList.add('no');fb.textContent='Count the objects in one box. The answer is '+qAns+'.';fb.style.color='var(--no)';
+        opts.querySelectorAll('.opt').forEach(function(x){if(parseInt(x.textContent)===qAns)x.classList.add('ok');});
+      }
+    };
     opts.appendChild(b);
   });
 }
