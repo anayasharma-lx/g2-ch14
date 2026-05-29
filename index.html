@@ -1,710 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Chapter 14 · Maps &amp; Directions</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 14 · Division Readiness</title>
+<link href="https://fonts.googleapis.com/css2?family=Grandstander:wght@500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ocean:#1565C0;--beach:#F9A825;--forest:#2E7D32;--river:#0288D1;
-  --sand:#F5E8C8;--parch:#EDD9A3;--parch2:#E0C878;
-  --red:#C0392B;--gold:#B8860B;
-  --ink:#1A0A04;--ink2:#4A2A10;--ink3:#8A6030;--rule:#C8A060;
-  --sans:'Syne',sans-serif;--serif:'Instrument Serif',serif;--mono:'Space Mono',monospace;
-}
-html,body{width:100%;min-height:100vh;background:var(--sand);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.04;
-  background:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40 L40 0' stroke='%23876010' stroke-width='0.5'/%3E%3C/svg%3E")}
-.header{background:var(--ocean);padding:0 22px;display:flex;align-items:center;gap:16px;height:56px;
-  border-bottom:3px solid #0D47A1;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.header-title{font-family:var(--serif);font-size:21px;color:#F0F8FF;font-style:italic}
-.header-sub{font-family:var(--mono);font-size:10px;color:rgba(240,248,255,0.5);letter-spacing:1.5px;text-transform:uppercase}
-.header-tabs{margin-left:auto;display:flex;gap:0;background:rgba(0,0,0,0.25);border-radius:8px;padding:3px}
-.tab{padding:7px 14px;font-family:var(--mono);font-size:11px;color:rgba(240,248,255,0.5);cursor:pointer;border-radius:6px;transition:.2s;border:none;background:none}
-.tab.on{background:var(--sand);color:var(--ink);font-weight:700}
-.tab:hover:not(.on){color:rgba(240,248,255,0.85)}
-.main{max-width:900px;margin:0 auto;padding:20px 16px 60px}
-.pnl{display:none}.pnl.on{display:block}
-.board{background:var(--parch);border:3px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:0 8px 32px rgba(0,0,0,0.18)}
-.board-head{background:var(--parch2);padding:12px 18px;border-bottom:2px solid var(--rule);font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.board-body{padding:16px 18px}
-/* MAP CANVAS */
-#map-canvas{display:block;width:100%;height:auto;cursor:default;touch-action:manipulation;border:3px solid var(--rule);border-radius:8px}
-/* CHALLENGES */
-.challenge{background:var(--sand);border:2px solid var(--rule);border-radius:10px;padding:16px 18px;margin-bottom:12px}
-.ch-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
-.ch-q{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--ink);margin-bottom:12px;line-height:1.5}
-.ch-opts{display:flex;gap:8px;flex-wrap:wrap}
-.ch-opt{padding:9px 18px;background:var(--parch);border:2px solid var(--rule);border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:.2s;color:var(--ink2)}
-.ch-opt:hover{border-color:var(--ocean);background:#E8F0FF}
-.ch-opt.correct{background:#DCFCE7;border-color:#16A34A;color:#14532D;animation:cpop .35s}
-.ch-opt.wrong{background:#FEE2E2;border-color:#DC2626;color:#7F1D1D;animation:cshk .35s}
-.ch-fb{margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;min-height:20px}
-.ch-fb.ok{color:#16A34A}.ch-fb.no{color:var(--red)}
-@keyframes cpop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
-@keyframes cshk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.next-btn{margin-top:12px;background:var(--ocean);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer}
-.submit-btn{padding:10px 22px;background:var(--gold);color:#fff;border:none;border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:.15s}
-.submit-btn:hover{background:var(--red)}
-.submit-btn:disabled{opacity:.45;cursor:not-allowed}
-.sel-opt{background:var(--parch2);border:2px solid var(--ocean) !important;color:var(--ink) !important}
-/* DIRECTIONS */
-.dir-card{background:var(--sand);border:2px solid var(--rule);border-radius:10px;padding:16px 18px;margin-bottom:12px}
-.compass-wrap{display:flex;justify-content:center;margin-bottom:16px}
-/* SCALE */
-.scale-wrap{background:var(--parch2);border:2px solid var(--rule);border-radius:8px;padding:14px 18px;margin-bottom:12px}
-/* PRACTICE */
-.prac-card{background:var(--parch);border:2px solid var(--rule);border-radius:12px;padding:20px;margin-bottom:14px;box-shadow:0 4px 16px rgba(0,0,0,0.1)}
-.prac-q{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink);margin-bottom:14px;line-height:1.6}
-.ans-opts{display:flex;gap:8px;flex-wrap:wrap}
-.ans-opt{padding:10px 18px;background:var(--parch2);border:2px solid var(--rule);border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:.2s;color:var(--ink)}
-.ans-opt:hover{border-color:var(--ocean);background:#E8F0FF}
-.ans-opt.correct{background:#DCFCE7;border-color:#16A34A;color:#14532D;animation:cpop .35s}
-.ans-opt.wrong{background:#FEE2E2;border-color:#DC2626;color:#7F1D1D;animation:cshk .35s}
-.pq-fb{min-height:22px;margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px}
-.pq-fb.ok{color:#16A34A}.pq-fb.no{color:var(--red)}
-.score-pill{background:var(--parch2);border:2px solid var(--rule);border-radius:8px;padding:8px 16px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink2);display:inline-block;margin-bottom:12px}
-@media(max-width:600px){.header{height:auto;padding:10px 16px;flex-wrap:wrap;gap:8px}.header-tabs{width:100%;justify-content:center}}
+:root{--ac:#B45309;--bg:#FDF6EE;--card:#fff;--ink:#1A2E2E;--ink2:#5F7A7A;--ok:#16A34A;--no:#DC2626;--r:20px}
+html,body{width:100%;min-height:100vh;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+.hdr{width:100%;position:sticky;top:0;z-index:100;background:var(--ac);box-shadow:0 4px 24px rgba(0,0,0,.15)}
+.hdr-in{max-width:640px;margin:0 auto;padding:14px 20px 0;text-align:center}
+.ch-n{font-family:'Grandstander',cursive;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.ch-t{font-family:'Grandstander',cursive;font-size:clamp(18px,5vw,26px);font-weight:900;color:#fff;line-height:1.2;margin:2px 0 10px;text-shadow:0 2px 8px rgba(0,0,0,.1)}
+.tabs{display:flex;gap:4px;max-width:280px;margin:0 auto;background:rgba(0,0,0,.1);border-radius:14px 14px 0 0;padding:4px 4px 0}
+.tab{flex:1;padding:9px 0;text-align:center;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;cursor:pointer;border-radius:12px 12px 0 0;color:rgba(255,255,255,.6);transition:.2s;user-select:none}
+.tab.on{background:var(--bg);color:var(--ac)}
+.tab:not(.on):hover{color:#fff;background:rgba(255,255,255,.08)}
+.page{max-width:620px;margin:0 auto;padding:14px 14px 60px}
+.pnl{display:none;flex-direction:column;gap:16px}.pnl.on{display:flex}
+.card{background:var(--card);border-radius:var(--r);padding:20px 18px;box-shadow:0 3px 16px rgba(0,0,0,.06);position:relative;overflow:hidden}
+.cb{position:absolute;top:0;left:0;bottom:0;width:5px;border-radius:var(--r) 0 0 var(--r);background:var(--ac)}
+.ct{font-family:'Grandstander',cursive;font-size:15px;font-weight:800;padding-left:14px;margin-bottom:3px;line-height:1.3}
+.cs{font-size:12px;color:var(--ink2);padding-left:14px;margin-bottom:14px;line-height:1.6}
+/* stepper */
+.cr{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.cg{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.03);border-radius:12px;padding:8px 12px;border:1.5px solid rgba(0,0,0,.06)}
+.cl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;min-width:48px}
+.sb{width:34px;height:34px;border-radius:50%;border:none;font-size:18px;font-weight:900;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.sb:active{transform:scale(.88)}
+.sv{font-family:'Grandstander',cursive;font-size:28px;font-weight:900;min-width:28px;text-align:center}
+/* blocks */
+.bx{background:rgba(0,0,0,.02);border-radius:14px;border:1.5px solid rgba(0,0,0,.06);padding:12px;min-height:60px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:14px}
+.flat{display:grid;grid-template-columns:repeat(10,8px);gap:1px}.flat-c{width:8px;height:8px;border-radius:1px;opacity:.8}
+.rod{display:flex;flex-direction:column;gap:1px}.rod-c{width:10px;height:10px;border-radius:1px;opacity:.8}
+.units{display:flex;flex-wrap:wrap;gap:2px;max-width:58px;align-self:flex-end}.unit-c{width:10px;height:10px;border-radius:2px;opacity:.8}
+.sep{width:1px;background:#D1D5DB;align-self:stretch;margin:0 3px}
+/* options */
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{font-family:'Grandstander',cursive;font-size:22px;font-weight:800;min-width:72px;height:54px;border-radius:16px;border:2.5px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.opt:hover{border-color:var(--ac);transform:translateY(-2px)}
+.opt.ok{background:#DCFCE7;border-color:var(--ok);color:#15803D;animation:pop .3s}
+.opt.no{background:#FEE2E2;border-color:var(--no);color:var(--no);animation:shk .35s}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.fb{font-family:'Grandstander',cursive;font-size:14px;font-weight:700;min-height:20px;margin-top:10px;text-align:center}
+.nbtn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 24px;border-radius:14px;border:none;background:var(--ac);color:#fff;cursor:pointer;margin-top:12px;box-shadow:0 3px 10px rgba(0,0,0,.12);transition:.15s}
+.nbtn:hover{transform:translateY(-1px);opacity:.9}
+.btn{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn:hover{transform:translateY(-1px)}
+.btn-p{background:var(--ac);color:#fff}
+.btn-g{background:#fff;color:var(--ink2);border:1.5px solid rgba(0,0,0,.1)}
+.btn-g:hover{border-color:var(--ac);color:var(--ac)}
+.chal{background:rgba(0,0,0,.02);border-radius:16px;padding:14px;border:1.5px dashed rgba(0,0,0,.1);margin-top:10px}
+.chal-q{font-family:'Grandstander',cursive;font-size:14px;font-weight:800;margin-bottom:10px}
+.chal-q b{color:var(--ac);font-size:22px}
+canvas{display:block;border-radius:10px}
+/* drag & tap shared */
+.tappable{cursor:pointer;user-select:none;transition:transform .15s}
+.tappable:hover{transform:scale(1.08)}
+.tappable:active{transform:scale(.92)}
+/* misc */
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;font-family:'Grandstander',cursive;font-size:14px;font-weight:800;padding:6px 18px;border-radius:30px}
+.big{font-family:'Grandstander',cursive;font-weight:900;line-height:1;text-align:center}
 </style>
 </head>
 <body>
-<div class="header">
-  <svg width="34" height="34" viewBox="0 0 34 34" style="flex-shrink:0">
-    <circle cx="17" cy="17" r="13" fill="none" stroke="#F0F8FF" stroke-width="1.5"/>
-    <polygon points="17,6 19,14 17,12 15,14" fill="#F0F8FF"/>
-    <text x="17" y="11" text-anchor="middle" font-family="serif" font-size="5" fill="#F0F8FF">N</text>
-    <line x1="17" y1="17" x2="17" y2="26" stroke="#F0F8FF" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="17" cy="17" r="2" fill="#F9A825"/>
-  </svg>
-  <div>
-    <div class="header-title">Island Explorer</div>
-    <div class="header-sub">Chapter 14 · Maps &amp; Directions</div>
+<div class="hdr"><div class="hdr-in">
+  <div class="ch-n">Chapter 14</div>
+  <div class="ch-t">Division Readiness</div>
+  <div class="tabs">
+    <div class="tab on" onclick="sw('learn')">Learn</div>
+    <div class="tab" onclick="sw('practice')">Practice</div>
   </div>
-  <div class="header-tabs">
-    <button class="tab on" onclick="switchTab('grid')">Grid Map</button>
-    <button class="tab" onclick="switchTab('directions')">Directions</button>
-    <button class="tab" onclick="switchTab('scale')">Scale</button>
-    <button class="tab" onclick="switchTab('practice')">Practice</button>
-  </div>
-</div>
+</div></div>
+<div class="page">
 
-<div class="main">
-
-<!-- GRID MAP TAB -->
-<div class="pnl on" id="pnl-grid">
-  <div class="board">
-    <div class="board-head">
-      <span>🗺️ Treasure Island</span>
-      <div class="score-pill" style="margin-left:auto;margin-bottom:0">Score: <span id="grid-score">0</span> / <span id="grid-total">0</span></div>
+<div class="pnl on" id="p-learn">
+  <div class="card"><div class="cb"></div>
+    <div class="ct">Share objects equally into groups</div>
+    <div class="cs">Choose how many objects and how many groups. Tap an object to select it, then tap a box to place it. Every box must get the same number!</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;background:rgba(0,0,0,.02);border-radius:14px;padding:12px;border:1.5px solid rgba(0,0,0,.06);margin-bottom:14px;align-items:center">
+      <div class="cg"><span class="cl" style="color:var(--ac)">Objects</span><button class="sb" style="background:var(--ac)" onclick="chS('n',-1)">−</button><span class="sv" style="color:var(--ac)" id="nVal">12</span><button class="sb" style="background:var(--ac)" onclick="chS('n',1)">+</button></div>
+      <div class="cg"><span class="cl" style="color:var(--ac)">Groups</span><button class="sb" style="background:var(--ac)" onclick="chS('g',-1)">−</button><span class="sv" style="color:var(--ac)" id="gVal">3</span><button class="sb" style="background:var(--ac)" onclick="chS('g',1)">+</button></div>
+      <button class="btn btn-p" onclick="startS()" style="margin-left:auto">Start ▶</button>
     </div>
-    <div class="board-body">
-      <!-- Challenge question shown ABOVE the map -->
-      <div id="grid-challenge-above" style="margin-bottom:12px"></div>
-      <canvas id="map-canvas" width="540" height="450"></canvas>
-      <!-- Submit area below map -->
-      <div id="grid-submit-area" style="margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <button class="next-btn" id="grid-submit-btn" onclick="submitGridAnswer()" style="background:var(--gold);opacity:0.5;cursor:not-allowed" disabled>Check Answer</button>
-        <span style="font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink3)" id="grid-selected-hint">Tap a square on the map to select it</span>
-      </div>
-      <div class="ch-fb" id="gfb" style="margin-top:10px"></div>
-    </div>
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px">Tap an object, then tap a box <span id="poolCnt"></span></div>
+    <div id="pool" style="min-height:60px;background:rgba(0,0,0,.02);border-radius:14px;border:1.5px dashed rgba(0,0,0,.1);padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px"></div>
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px">Your groups</div>
+    <div id="boxes" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:14px"></div>
+    <div id="result" style="background:rgba(0,0,0,.02);border-radius:14px;padding:14px;border:1.5px solid rgba(0,0,0,.06);text-align:center;min-height:50px"></div>
   </div>
 </div>
-
-<!-- DIRECTIONS TAB -->
-<div class="pnl" id="pnl-directions">
-  <div class="board">
-    <div class="board-head">🧭 Compass Directions</div>
-    <div class="board-body">
-      <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink2);margin-bottom:16px;line-height:1.7">
-        A compass shows North, South, East and West. North is always towards the top of the map. Use the map and compass below to answer each question.
-      </div>
-      <div class="compass-wrap">
-        <canvas id="compass-canvas" width="180" height="180" style="width:180px;height:180px"></canvas>
-      </div>
-      <div id="dir-challenges"></div>
-    </div>
-  </div>
-</div>
-
-<!-- SCALE TAB -->
-<div class="pnl" id="pnl-scale">
-  <div class="board">
-    <div class="board-head">📏 Map Scale — How far is it really?</div>
-    <div class="board-body">
-      <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink2);margin-bottom:14px;line-height:1.7">
-        A <strong style="font-style:normal">map scale</strong> tells you how distances on the map compare to real life.
-        On this map: <span style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ocean)">1 cm on the map = 2 km in real life</span>.
-        So if something looks 3 cm apart on the map, it is really 3 × 2 = <strong style="font-style:normal">6 km</strong> away!
-      </div>
-
-      <!-- Visual worked example with interactive map distance slider -->
-      <div class="scale-wrap" style="margin-bottom:16px">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px">Try it — drag the ruler to measure a distance</div>
-        <canvas id="ruler-canvas" width="400" height="60" style="display:block;max-width:100%;border-radius:4px"></canvas>
-        <div style="margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <span style="font-family:var(--mono);font-size:13px;color:var(--ink2)">Map distance:</span>
-          <input type="range" id="scale-slider" min="1" max="10" value="3" step="1" style="flex:1;min-width:120px;accent-color:var(--ocean)"/>
-          <span style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--ocean);min-width:32px" id="scale-slider-cm">3 cm</span>
-        </div>
-        <!-- Step-by-step working -->
-        <div style="margin-top:14px;background:var(--sand);border:2px solid var(--rule);border-radius:8px;padding:14px 16px">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px">Working it out:</div>
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink)">
-            <span id="sc-step1" style="background:var(--parch2);border:2px solid var(--rule);border-radius:6px;padding:6px 12px">3 cm</span>
-            <span style="color:var(--ink3)">×</span>
-            <span style="background:var(--parch2);border:2px solid var(--rule);border-radius:6px;padding:6px 12px">2 km</span>
-            <span style="color:var(--ink3)">=</span>
-            <span id="sc-result" style="background:var(--ocean);color:#fff;border-radius:6px;padding:6px 14px;font-size:18px">6 km</span>
-          </div>
-          <div style="margin-top:8px;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink3)" id="sc-sentence">
-            3 cm on the map = 6 km in real life
-          </div>
-        </div>
-      </div>
-
-      <!-- Challenges with submit buttons -->
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px">Now try these questions</div>
-      <div class="score-pill" style="margin-bottom:12px">Score: <span id="scale-score">0</span> / <span id="scale-total">0</span></div>
-      <div id="scale-challenges"></div>
-    </div>
-  </div>
-</div>
-
-<!-- PRACTICE -->
-<div class="pnl" id="pnl-practice">
-  <div class="prac-card">
-    <div class="prac-q" id="pq-text">Loading…</div>
-    <div class="ans-opts" id="pq-opts"></div>
-    <div style="margin-top:12px">
-      <button class="submit-btn" id="pq-submit" onclick="submitPQ()" disabled style="opacity:.45;cursor:not-allowed">Check Answer</button>
-    </div>
-    <div class="pq-fb" id="pq-fb"></div>
+<div class="pnl" id="p-practice">
+  <div class="card"><div class="cb"></div>
+    <div class="ct">How many in each group?</div>
+    <div class="cs">Objects have been shared equally. Count how many are in ONE group.</div>
+    <div style="font-family:Grandstander,cursive;font-size:15px;font-weight:800;margin-bottom:10px" id="qD">Loading…</div>
+    <div id="qScene" style="display:flex;gap:8px;flex-wrap:wrap;background:rgba(0,0,0,.02);border-radius:14px;padding:12px;border:1.5px solid rgba(0,0,0,.06);margin-bottom:14px;align-items:flex-start"></div>
+    <div class="opts" id="qO"></div>
+    <div class="fb" id="qF"></div>
+    <button class="nbtn" onclick="nwDQ()">Next →</button>
   </div>
 </div>
 
 </div>
 <script>
-// ── MAP DATA ─────────────────────────────────────────────────
-const COLS=9,ROWS=8;
-const LETTERS='ABCDEFGHI';
-// Terrain: 0=ocean 1=sand 2=forest 3=river
-const T=[
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,1,1,2,2,1,0,0],
-  [0,1,2,2,3,2,2,1,0],
-  [0,1,2,3,3,2,2,2,1],
-  [0,1,2,2,3,2,2,1,0],
-  [0,0,1,2,2,2,1,0,0],
-  [0,0,0,1,1,1,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-];
-const TC={'0':'#1565C0','1':'#F9A825','2':'#2E7D32','3':'#0288D1'};
+function sw(n){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.textContent.toLowerCase()===n)});document.querySelectorAll('.pnl').forEach(function(p){var a=p.id==='p-'+n;p.classList.toggle('on',a);p.style.display=a?'flex':'none'})}
+document.getElementById('p-practice').style.display='none';
+function pool4(ans,lo,hi){var s=new Set([ans]);var i=0;while(s.size<4&&i<50){i++;var w=ans+Math.round(Math.random()*8-4);if(w>=lo&&w<=hi&&w!==ans)s.add(w)}return[...s].sort(function(){return Math.random()-.5})}
+function mkOpts(cid,items,correct,fid){var c=document.getElementById(cid);c.innerHTML='';items.forEach(function(n){var b=document.createElement('button');b.className='opt';b.textContent=n;b.onclick=function(){c.querySelectorAll('.opt').forEach(function(x){x.onclick=null});var fb=document.getElementById(fid);if(String(n)===String(correct)){b.classList.add('ok');fb.textContent='🎉 Correct!';fb.style.color='var(--ok)'}else{b.classList.add('no');fb.textContent='The answer is '+correct+'.';fb.style.color='var(--no)';c.querySelectorAll('.opt').forEach(function(x){if(String(x.textContent)===String(correct))x.classList.add('ok')})}};c.appendChild(b)})}
 
-// Landmarks: [col,row,emoji,name,shortName]
-const LM=[
-  [1,5,'\u2693','Ship Landing','Ship'],
-  [4,2,'\u26F0','Rocky Peak','Peak'],
-  [2,3,'\uD83C\uDFD8','Village of Mango','Village'],
-  [6,2,'\uD83D\uDED5','Forest Temple','Temple'],
-  [7,3,'\uD83D\uDCB0','Treasure Cove','Treasure'],
-];
+var OBJS=['🍬','🍭','🧁','🍩','🍪','⭐','🎈','🏅','🍎','🌸'];
+var nItems=12, nGroups=3, selIdx=null, boxContents=[], curObj='🍬';
 
-const mapCvs=document.getElementById('map-canvas');
-const mapCtx=mapCvs.getContext('2d');
-let CELL=54;
-
-function initMap(){
-  const mw=Math.min(mapCvs.parentElement.offsetWidth||540,540);
-  CELL=Math.floor(mw/COLS);
-  mapCvs.width=CELL*COLS;mapCvs.height=CELL*ROWS;
-  drawMap(null);
+function chS(d,v){
+  if(d==='n')nItems=Math.max(2,Math.min(20,nItems+v));
+  else nGroups=Math.max(2,Math.min(6,nGroups+v));
+  document.getElementById('nVal').textContent=nItems;
+  document.getElementById('gVal').textContent=nGroups;
 }
 
-function drawMap(highlightKey){
-  const W=mapCvs.width,H=mapCvs.height;
-  // Terrain
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-    mapCtx.fillStyle=TC[T[r][c]];
-    mapCtx.fillRect(c*CELL,r*CELL,CELL,CELL);
-    // texture
-    if(T[r][c]===2){
-      mapCtx.fillStyle='rgba(0,80,0,0.1)';
-      mapCtx.beginPath();mapCtx.arc(c*CELL+CELL*.35,r*CELL+CELL*.35,CELL*.18,0,Math.PI*2);mapCtx.fill();
-    }
+function startS(){
+  curObj=OBJS[Math.floor(Math.random()*OBJS.length)];
+  boxContents=Array.from({length:nGroups},function(){return[]});
+  selIdx=null;
+  document.getElementById('result').innerHTML='';
+  bldPool();bldBoxes();updCnt();
+}
+
+function bldPool(){
+  var el=document.getElementById('pool');el.innerHTML='';
+  for(var i=0;i<nItems;i++){
+    var s=document.createElement('span');
+    s.style.cssText='font-size:30px;cursor:pointer;user-select:none;transition:all .18s;line-height:1;border-radius:8px;padding:3px;display:inline-block';
+    s.textContent=curObj;s.dataset.i=i;
+    (function(idx){s.onclick=function(){
+      if(s.classList.contains('used'))return;
+      selIdx=(selIdx===idx?null:idx);updPool();
+    }})(i);
+    el.appendChild(s);
   }
-  // Grid lines
-  mapCtx.strokeStyle='rgba(0,0,0,0.15)';mapCtx.lineWidth=0.8;mapCtx.setLineDash([]);
-  for(let c=0;c<=COLS;c++){mapCtx.beginPath();mapCtx.moveTo(c*CELL,0);mapCtx.lineTo(c*CELL,H);mapCtx.stroke()}
-  for(let r=0;r<=ROWS;r++){mapCtx.beginPath();mapCtx.moveTo(0,r*CELL);mapCtx.lineTo(W,r*CELL);mapCtx.stroke()}
-  // Grid labels - letters along bottom, numbers along left
-  mapCtx.fillStyle='rgba(255,255,255,0.85)';mapCtx.font='bold '+Math.round(CELL*.22)+'px "Space Mono",monospace';
-  mapCtx.textAlign='center';mapCtx.textBaseline='middle';
-  for(let c=0;c<COLS;c++)mapCtx.fillText(LETTERS[c],c*CELL+CELL/2,H-CELL*.12);
-  mapCtx.textAlign='right';
-  for(let r=0;r<ROWS;r++)mapCtx.fillText(r+1,CELL*.18,r*CELL+CELL/2);
-  // Highlight square
-  if(highlightKey){
-    const[hc,hr]=highlightKey.split(',').map(Number);
-    mapCtx.fillStyle='rgba(255,255,100,0.28)';
-    mapCtx.fillRect(hc*CELL,hr*CELL,CELL,CELL);
-    mapCtx.strokeStyle='#F9A825';mapCtx.lineWidth=2.5;
-    mapCtx.strokeRect(hc*CELL+1,hr*CELL+1,CELL-2,CELL-2);
+}
+
+function updPool(){
+  document.querySelectorAll('#pool span:not(.used)').forEach(function(s){
+    var i=parseInt(s.dataset.i);
+    var sel=i===selIdx;
+    s.style.background=sel?'rgba(0,0,0,.08)':'';
+    s.style.transform=sel?'scale(1.18)':'';
+    s.style.outline=sel?'2px solid var(--ac)':'none';
+  });
+}
+
+function updCnt(){
+  var placed=boxContents.reduce(function(a,b){return a+b.length},0);
+  document.getElementById('poolCnt').textContent='('+placed+' placed, '+(nItems-placed)+' left)';
+}
+
+function bldBoxes(){
+  var el=document.getElementById('boxes');el.innerHTML='';
+  for(var b=0;b<nGroups;b++){
+    var wrap=document.createElement('div');wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:6px';
+    var lbl=document.createElement('div');lbl.style.cssText='font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2)';lbl.textContent='Box '+(b+1);
+    var box=document.createElement('div');
+    box.style.cssText='min-width:80px;min-height:80px;background:rgba(0,0,0,.02);border:2px dashed rgba(0,0,0,.1);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;cursor:pointer;transition:.18s';
+    box.innerHTML='<span style="font-size:10px;color:rgba(0,0,0,.2);font-weight:700;width:100%;text-align:center;padding-top:6px">tap to place</span>';
+    (function(bx){box.onmouseenter=function(){box.style.borderColor='var(--ac)'};box.onmouseleave=function(){box.style.borderColor='rgba(0,0,0,.1)'};box.onclick=function(){giveToBox(bx)}})(b);
+    var cnt=document.createElement('div');cnt.style.cssText='font-family:Grandstander,cursive;font-size:22px;font-weight:900;color:var(--ac)';cnt.id='bc'+b;cnt.textContent='0';
+    wrap.appendChild(lbl);wrap.appendChild(box);wrap.appendChild(cnt);el.appendChild(wrap);
   }
-  // Landmarks
-  LM.forEach(([lc,lr,em,name,short])=>{
-    const x=lc*CELL+CELL/2,y=lr*CELL+CELL/2;
-    // Background circle
-    mapCtx.fillStyle='rgba(245,232,200,0.88)';
-    mapCtx.beginPath();mapCtx.arc(x,y,CELL*.38,0,Math.PI*2);mapCtx.fill();
-    mapCtx.strokeStyle='rgba(139,96,16,0.6)';mapCtx.lineWidth=1.5;mapCtx.stroke();
-    // Emoji
-    mapCtx.font=Math.round(CELL*.38)+'px serif';mapCtx.textAlign='center';mapCtx.textBaseline='middle';
-    mapCtx.fillText(em,x,y);
-    // Label
-    mapCtx.font='bold '+Math.round(CELL*.17)+'px "Space Mono",monospace';
-    const tw=mapCtx.measureText(short).width;
-    mapCtx.fillStyle='rgba(0,0,0,0.72)';
-    mapCtx.beginPath();mapCtx.roundRect(x-tw/2-3,lr*CELL+CELL-.5-13,tw+6,13,2);mapCtx.fill();
-    mapCtx.fillStyle='#fff';mapCtx.textBaseline='top';
-    mapCtx.fillText(short,x,lr*CELL+CELL-1-13);
-  });
-  // Compass rose (top right)
-  drawCompassMini(W-CELL*.7,CELL*.7,CELL*.5);
 }
 
-function drawCompassMini(cx,cy,r){
-  mapCtx.fillStyle='rgba(245,232,200,0.9)';mapCtx.beginPath();mapCtx.arc(cx,cy,r,0,Math.PI*2);mapCtx.fill();
-  mapCtx.strokeStyle='rgba(139,96,16,0.5)';mapCtx.lineWidth=1.5;mapCtx.stroke();
-  const dirs=[['N',-Math.PI/2,'#C0392B'],['S',Math.PI/2,'#1A0A04'],['E',0,'#1A0A04'],['W',Math.PI,'#1A0A04']];
-  dirs.forEach(([l,a,col])=>{
-    mapCtx.fillStyle=col;mapCtx.font='bold '+Math.round(r*.38)+'px "Space Mono",monospace';
-    mapCtx.textAlign='center';mapCtx.textBaseline='middle';
-    mapCtx.fillText(l,cx+Math.cos(a)*r*.6,cy+Math.sin(a)*r*.6);
-  });
-  mapCtx.fillStyle='#C0392B';mapCtx.beginPath();mapCtx.moveTo(cx,cy-r*.45);mapCtx.lineTo(cx-4,cy);mapCtx.lineTo(cx+4,cy);mapCtx.closePath();mapCtx.fill();
-  mapCtx.fillStyle='#555';mapCtx.beginPath();mapCtx.moveTo(cx,cy+r*.45);mapCtx.lineTo(cx-4,cy);mapCtx.lineTo(cx+4,cy);mapCtx.closePath();mapCtx.fill();
-  mapCtx.fillStyle='#1A0A04';mapCtx.beginPath();mapCtx.arc(cx,cy,3,0,Math.PI*2);mapCtx.fill();
+function giveToBox(b){
+  if(selIdx===null){document.getElementById('result').innerHTML='<div style="font-size:13px;font-weight:600;color:var(--no)">Tap an object first!</div>';return}
+  var s=document.querySelector('#pool span[data-i="'+selIdx+'"]');
+  if(s){s.classList.add('used');s.style.cssText='font-size:30px;line-height:1;opacity:.15;filter:grayscale(1);pointer-events:none;padding:3px'}
+  boxContents[b].push(selIdx);selIdx=null;updPool();
+  var box=document.querySelectorAll('#boxes .\\:not(lbl)');
+  var boxes=document.querySelectorAll('#boxes div > div[style*="min-width:80px"]');
+  if(boxes[b]){var ph=boxes[b].querySelector('span');if(ph)ph.remove();var em=document.createElement('span');em.style.cssText='font-size:20px;line-height:1;animation:pop .2s';em.textContent=curObj;boxes[b].appendChild(em)}
+  document.getElementById('bc'+b).textContent=boxContents[b].length;
+  updCnt();chkDone();
 }
 
-// Map interaction
-function getMapCell(e){
-  const rect=mapCvs.getBoundingClientRect();
-  const sx=mapCvs.width/rect.width;
-  const src=e.touches?e.touches[0]:e;
-  const c=Math.floor((src.clientX-rect.left)*sx/CELL);
-  const r=Math.floor((src.clientY-rect.top)*sx/CELL);
-  if(c<0||c>=COLS||r<0||r>=ROWS)return null;
-  return{c,r,key:c+','+r};
-}
-
-// Map interaction — touch/click only, no hover
-function getMapCell(e){
-  const rect=mapCvs.getBoundingClientRect();
-  const sx=mapCvs.width/rect.width;
-  const src=e.touches?e.touches[0]:e.changedTouches?e.changedTouches[0]:e;
-  const c=Math.floor((src.clientX-rect.left)*sx/CELL);
-  const r=Math.floor((src.clientY-rect.top)*sx/CELL);
-  if(c<0||c>=COLS||r<0||r>=ROWS)return null;
-  return{c,r,key:c+','+r};
-}
-
-// Draw selection ref label directly on canvas
-function drawSelectionLabel(c,r){
-  if(c===null)return;
-  const ref=LETTERS[c]+(r+1);
-  const lm=LM.find(([lc,lr])=>lc===c&&lr===r);
-  const terrain=['Ocean','Beach','Forest','River'][T[r][c]];
-  const label=lm?lm[3]+' ('+ref+')':terrain+' — '+ref;
-  const x=c*CELL+CELL/2, y=r*CELL;
-  mapCtx.save();
-  mapCtx.font='bold 13px "Space Mono",monospace';
-  const tw=mapCtx.measureText(label).width;
-  const bw=tw+12, bh=22;
-  let bx=x-bw/2, by=y-bh-4;
-  bx=Math.max(2,Math.min(mapCvs.width-bw-2,bx));
-  by=Math.max(2,by<2?y+CELL+4:by);
-  mapCtx.fillStyle='rgba(21,101,192,0.92)';
-  mapCtx.beginPath();mapCtx.roundRect(bx,by,bw,bh,5);mapCtx.fill();
-  mapCtx.fillStyle='#fff';mapCtx.textAlign='left';mapCtx.textBaseline='middle';
-  mapCtx.fillText(label,bx+6,by+bh/2);
-  mapCtx.restore();
-}
-
-let touchMoved=false;
-mapCvs.addEventListener('touchstart',e=>{touchMoved=false;},{passive:true});
-mapCvs.addEventListener('touchmove',e=>{touchMoved=true;},{passive:true});
-mapCvs.addEventListener('touchend',e=>{
-  if(touchMoved)return; // ignore scroll
-  e.preventDefault();
-  const cell=getMapCell(e);
-  if(cell)selectGridCell(cell.c,cell.r);
-},{passive:false});
-// Desktop click (only fires on mouse, not after touch because touchend preventDefault)
-mapCvs.addEventListener('click',e=>{
-  const cell=getMapCell(e);
-  if(cell)selectGridCell(cell.c,cell.r);
-});
-
-// ── GRID CHALLENGES ───────────────────────────────────────────
-const GRID_CHS=[
-  {q:'Find the Ship Landing on the map and tap its square.',target:[1,5],ans:'B6'},
-  {q:'Where is the Treasure Cove? Tap that square.',target:[7,3],ans:'H4'},
-  {q:'Tap the square where the Forest Temple is.',target:[6,2],ans:'G3'},
-  {q:'Find the Village of Mango and tap its square.',target:[2,3],ans:'C4'},
-  {q:'Where is Rocky Peak? Tap the correct square.',target:[4,2],ans:'E3'},
-  {q:'Tap any FOREST square (dark green area).',targetTerrain:2,ans:'forest'},
-  {q:'Tap any RIVER square (light blue water).',targetTerrain:3,ans:'river'},
-  {q:'Tap the square at grid reference D5.',target:[3,4],ans:'D5'},
-  {q:'Tap the square at grid reference F2.',target:[5,1],ans:'F2'},
-];
-let gridIdx=0,gridScore=0,gridTotal=0;
-let gridSelectedCell=null; // {c,r} of currently selected square
-
-function nextGridChallenge(){
-  if(gridIdx>=GRID_CHS.length)gridIdx=0;
-  gridSelectedCell=null;
-  drawMap(null);
-  const ch=GRID_CHS[gridIdx];
-  document.getElementById('grid-challenge-above').innerHTML=
-    '<div class="challenge" style="margin-bottom:0">'
-    +'<div class="ch-tag">Challenge '+(gridIdx+1)+' of '+GRID_CHS.length+'</div>'
-    +'<div class="ch-q">'+ch.q+'</div>'
-    +'</div>';
-  const btn=document.getElementById('grid-submit-btn');
-  btn.disabled=true;btn.style.opacity='0.5';btn.style.cursor='not-allowed';
-  btn.style.background='var(--gold)';btn.textContent='Check Answer';
-  btn.onclick=submitGridAnswer;
-  document.getElementById('grid-selected-hint').textContent='Tap a square on the map to select it';
-  document.getElementById('gfb').textContent='';
-  document.getElementById('gfb').className='ch-fb';
-}
-
-function selectGridCell(c,r){
-  gridSelectedCell={c,r};
-  drawMap(c+','+r);
-  drawSelectionLabel(c,r);
-  const ref=LETTERS[c]+(r+1);
-  document.getElementById('grid-selected-hint').textContent='Selected: '+ref+' — press Check Answer';
-  const btn=document.getElementById('grid-submit-btn');
-  btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';
-}
-
-function submitGridAnswer(){
-  if(!gridSelectedCell)return;
-  const ch=GRID_CHS[gridIdx];
-  const {c,r}=gridSelectedCell;
-  let correct=false;
-  if(ch.target&&ch.target[0]===c&&ch.target[1]===r)correct=true;
-  if(ch.targetTerrain!==undefined&&T[r][c]===ch.targetTerrain)correct=true;
-  gridTotal++;
-  document.getElementById('grid-total').textContent=gridTotal;
-  const fb=document.getElementById('gfb');
-  const ref=LETTERS[c]+(r+1);
-  const btn=document.getElementById('grid-submit-btn');
-  if(correct){
-    gridScore++;
-    document.getElementById('grid-score').textContent=gridScore;
-    fb.textContent='\u2713 Correct! '+ref+' is right.';
-    fb.className='ch-fb ok';
-    btn.textContent='Next challenge \u2192';
-    btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';
-    btn.onclick=()=>{gridIdx++;nextGridChallenge();};
+function chkDone(){
+  var placed=boxContents.reduce(function(a,b){return a+b.length},0);
+  if(placed<nItems)return;
+  var counts=boxContents.map(function(b){return b.length});
+  var equal=counts.every(function(c){return c===counts[0]});
+  var res=document.getElementById('result');
+  if(equal){
+    res.innerHTML='<div style="font-family:Grandstander,cursive;font-size:28px;font-weight:900;color:var(--ac)">'+nItems+' ÷ '+nGroups+' = '+counts[0]+'</div>'
+      +'<div style="font-size:13px;font-weight:700;color:var(--ok);margin-top:6px">🎉 Every group got exactly '+counts[0]+'! Perfectly equal!</div>';
   } else {
-    fb.textContent='\u2717 That square is '+ref+', which is not correct. Tap a different square and try again.';
-    fb.className='ch-fb no';
-    gridSelectedCell=null;
-    drawMap(null);
-    btn.disabled=true;btn.style.opacity='0.5';btn.style.cursor='not-allowed';
-    btn.textContent='Check Answer';btn.onclick=submitGridAnswer;
-    document.getElementById('grid-selected-hint').textContent='Try again — tap a different square';
+    res.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--no)">Not equal — groups have: '+counts.join(', ')+'. Try pressing Start again.</div>';
   }
 }
+startS();
 
-// ── COMPASS / DIRECTION CHALLENGES ───────────────────────────
-const compassCvs=document.getElementById('compass-canvas');
-const compassCtx=compassCvs.getContext('2d');
-
-function drawCompass(){
-  const cx=90,cy=90,r=80;
-  compassCtx.clearRect(0,0,180,180);
-  compassCtx.fillStyle='#F5EDD8';compassCtx.beginPath();compassCtx.arc(cx,cy,r,0,Math.PI*2);compassCtx.fill();
-  compassCtx.strokeStyle='#8B6010';compassCtx.lineWidth=3;compassCtx.stroke();
-  for(let i=0;i<8;i++){
-    const a=i*Math.PI/4;
-    compassCtx.strokeStyle=i%2===0?'#2A1E0A':'rgba(42,30,10,0.35)';
-    compassCtx.lineWidth=i%2===0?2.5:1.5;
-    compassCtx.beginPath();compassCtx.moveTo(cx+Math.cos(a)*(r-4),cy+Math.sin(a)*(r-4));
-    compassCtx.lineTo(cx+Math.cos(a)*(i%2===0?r-18:r-12),cy+Math.sin(a)*(i%2===0?r-18:r-12));
-    compassCtx.stroke();
+/* Practice quiz */
+var QOBJS=['🍬','🍪','⭐','🍎','🌸','🎈','🏅','🔵'];
+var qA=0, qN=0;
+function nwDQ(){
+  var totals=[4,6,8,9,10,12,15];var divs=[2,3,4,5];
+  var tries=0,total,divBy;
+  do{total=totals[Math.floor(Math.random()*totals.length)];divBy=divs[Math.floor(Math.random()*divs.length)];tries++}while(total%divBy!==0&&tries<50);
+  if(total%divBy!==0){total=12;divBy=3}
+  qA=total/divBy;qN=divBy;
+  var em=QOBJS[Math.floor(Math.random()*QOBJS.length)];
+  document.getElementById('qD').textContent=total+' objects shared equally into '+divBy+' groups. How many in each group?';
+  document.getElementById('qF').textContent='';
+  var sc=document.getElementById('qScene');sc.innerHTML='';
+  for(var b=0;b<divBy;b++){
+    var box=document.createElement('div');
+    box.style.cssText='background:#fff;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;min-width:60px;min-height:54px';
+    for(var i=0;i<qA;i++){var s=document.createElement('span');s.style.fontSize='18px';s.textContent=em;box.appendChild(s)}
+    sc.appendChild(box);
   }
-  const dirs=[['N',-Math.PI/2,'#C0392B',18],['S',Math.PI/2,'#2A1E0A',16],['E',0,'#2A1E0A',16],['W',Math.PI,'#2A1E0A',16],
-    ['NE',-Math.PI/4,'rgba(42,30,10,0.5)',12],['SE',Math.PI/4,'rgba(42,30,10,0.5)',12],
-    ['SW',3*Math.PI/4,'rgba(42,30,10,0.5)',12],['NW',-3*Math.PI/4,'rgba(42,30,10,0.5)',12]];
-  dirs.forEach(([l,a,col,fs])=>{
-    compassCtx.fillStyle=col;compassCtx.font='bold '+fs+'px "Space Mono",monospace';
-    compassCtx.textAlign='center';compassCtx.textBaseline='middle';
-    compassCtx.fillText(l,cx+Math.cos(a)*(r-28),cy+Math.sin(a)*(r-28));
-  });
-  compassCtx.fillStyle='#C0392B';
-  compassCtx.beginPath();compassCtx.moveTo(cx,cy-r*.42);compassCtx.lineTo(cx-8,cy);compassCtx.lineTo(cx+8,cy);compassCtx.closePath();compassCtx.fill();
-  compassCtx.fillStyle='#2A1E0A';
-  compassCtx.beginPath();compassCtx.moveTo(cx,cy+r*.42);compassCtx.lineTo(cx-8,cy);compassCtx.lineTo(cx+8,cy);compassCtx.closePath();compassCtx.fill();
-  compassCtx.fillStyle='#FFF';compassCtx.beginPath();compassCtx.arc(cx,cy,8,0,Math.PI*2);compassCtx.fill();
-  compassCtx.strokeStyle='#8B6010';compassCtx.lineWidth=2;compassCtx.stroke();
-  compassCtx.fillStyle='#2A1E0A';compassCtx.beginPath();compassCtx.arc(cx,cy,4,0,Math.PI*2);compassCtx.fill();
-}
-
-const DIR_CHS=[
-  {q:'The Village (C4) is in which direction from the Ship (B6)?',ans:'North-East',opts:['North','North-East','East','South-East'],exp:'C4 is up (North) and to the right (East) of B6 — that is North-East.'},
-  {q:'The Treasure Cove (H4) is in which direction from the Rocky Peak (E3)?',ans:'East',opts:['North','East','South','West'],exp:'H4 is to the right of E3 on the same row — that is East.'},
-  {q:'If you face North and turn 90° clockwise, you face:',ans:'East',opts:['North','East','South','West'],exp:'Turning 90° clockwise from North puts you facing East.'},
-  {q:'You travel from E3 to E6. Which direction did you go?',ans:'South',opts:['North','East','South','West'],exp:'Row 3 to row 6 means going down the map — that is South.'},
-  {q:'On the compass, which direction is directly to the LEFT of East?',ans:'North',opts:['South','North','West','East'],exp:'On a compass rose, North is above and to the left of East.'},
-];
-let dirIdx=0;
-let dirSelected=null;
-
-function renderDirChallenge(){
-  if(dirIdx>=DIR_CHS.length)dirIdx=0;
-  dirSelected=null;
-  const ch=DIR_CHS[dirIdx];
-  const c=document.getElementById('dir-challenges');
-  c.innerHTML='';
-  const div=document.createElement('div');div.className='dir-card';
-  div.innerHTML='<div class="ch-tag">Direction challenge '+(dirIdx+1)+' of '+DIR_CHS.length+'</div>'
-    +'<div class="ch-q">'+ch.q+'</div>'
-    +'<div class="ch-opts" id="dir-opts"></div>'
-    +'<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
-    +'<button class="submit-btn" id="dir-submit" onclick="submitDir()" disabled style="opacity:.45;cursor:not-allowed">Check Answer</button>'
-    +'</div>'
-    +'<div class="ch-fb" id="dir-fb"></div>';
-  c.appendChild(div);
-  [...ch.opts].forEach(o=>{
-    const b=document.createElement('button');b.className='ch-opt';b.textContent=o;
-    b.onclick=()=>{
-      // Just select — don't reveal yet
-      div.querySelectorAll('.ch-opt').forEach(x=>x.classList.remove('sel-opt'));
-      b.classList.add('sel-opt');
-      dirSelected=o;
-      const sb=document.getElementById('dir-submit');
-      sb.disabled=false;sb.style.opacity='1';sb.style.cursor='pointer';
-    };
-    document.getElementById('dir-opts').appendChild(b);
+  var pool=new Set([qA]);var t=0;
+  while(pool.size<4&&t<40){t++;var w=qA+[-2,-1,1,2][Math.floor(Math.random()*4)];if(w>0&&w<=10)pool.add(w)}
+  var op=document.getElementById('qO');op.innerHTML='';
+  [...pool].sort(function(){return Math.random()-.5}).forEach(function(n){
+    var b=document.createElement('button');b.className='opt';b.textContent=n;
+    b.onclick=function(){op.querySelectorAll('.opt').forEach(function(x){x.onclick=null});var fb=document.getElementById('qF');
+      if(n===qA){b.classList.add('ok');fb.textContent='🎉 Correct! '+total+' ÷ '+qN+' = '+qA;fb.style.color='var(--ok)'}
+      else{b.classList.add('no');fb.textContent='Count ONE group carefully. Answer: '+qA;fb.style.color='var(--no)';op.querySelectorAll('.opt').forEach(function(x){if(parseInt(x.textContent)===qA)x.classList.add('ok')})}};
+    op.appendChild(b);
   });
 }
+nwDQ();
 
-function submitDir(){
-  if(!dirSelected)return;
-  const ch=DIR_CHS[dirIdx];
-  const ok=dirSelected===ch.ans;
-  const div=document.getElementById('dir-challenges').querySelector('.dir-card');
-  div.querySelectorAll('.ch-opt').forEach(x=>{
-    x.onclick=null;
-    if(x.textContent===dirSelected)x.classList.add(ok?'correct':'wrong');
-    if(!ok&&x.textContent===ch.ans)x.classList.add('correct');
-    x.classList.remove('sel-opt');
-  });
-  document.getElementById('dir-fb').textContent=(ok?'\u2713 Correct! ':'\u2717 Not quite. ')+ch.exp;
-  document.getElementById('dir-fb').className='ch-fb '+(ok?'ok':'no');
-  const sb=document.getElementById('dir-submit');
-  sb.textContent='Next \u2192';sb.disabled=false;sb.style.opacity='1';
-  sb.onclick=()=>{dirIdx++;renderDirChallenge();};
-}
-
-// ── SCALE ─────────────────────────────────────────────────────
-const rulerCvs=document.getElementById('ruler-canvas');
-const rulerCtx=rulerCvs.getContext('2d');
-
-function drawRuler(highlightCm){
-  const W=Math.min(rulerCvs.parentElement.offsetWidth||400,400);
-  rulerCvs.width=W;
-  const H=60,segW=Math.floor(W/10);
-  rulerCtx.fillStyle='#F5E8C8';rulerCtx.fillRect(0,0,W,H);
-  for(let cm=0;cm<10;cm++){
-    const x=cm*segW;
-    rulerCtx.fillStyle=cm%2===0?'#2A1E0A':'#C8A040';
-    rulerCtx.fillRect(x,12,segW,20);
-  }
-  // Highlight selected distance
-  if(highlightCm>0){
-    rulerCtx.fillStyle='rgba(21,101,192,0.35)';
-    rulerCtx.fillRect(0,12,highlightCm*segW,20);
-    rulerCtx.strokeStyle='#1565C0';rulerCtx.lineWidth=2.5;
-    rulerCtx.beginPath();rulerCtx.moveTo(0,12);rulerCtx.lineTo(highlightCm*segW,12);rulerCtx.stroke();
-    rulerCtx.beginPath();rulerCtx.moveTo(0,32);rulerCtx.lineTo(highlightCm*segW,32);rulerCtx.stroke();
-    rulerCtx.beginPath();rulerCtx.moveTo(0,12);rulerCtx.lineTo(0,32);rulerCtx.stroke();
-    rulerCtx.beginPath();rulerCtx.moveTo(highlightCm*segW,12);rulerCtx.lineTo(highlightCm*segW,32);rulerCtx.stroke();
-  }
-  // cm labels on ruler
-  rulerCtx.fillStyle='#fff';rulerCtx.font='bold 10px "Space Mono",monospace';rulerCtx.textAlign='center';rulerCtx.textBaseline='middle';
-  for(let cm=0;cm<10;cm++){rulerCtx.fillText(cm+'cm',cm*segW+segW/2,22);}
-  // km labels below
-  rulerCtx.fillStyle='#8B6010';rulerCtx.textBaseline='top';
-  for(let cm=0;cm<=10;cm++){
-    const x=cm*segW;
-    rulerCtx.fillStyle='rgba(139,96,16,0.6)';
-    rulerCtx.beginPath();rulerCtx.moveTo(x,32);rulerCtx.lineTo(x,38);rulerCtx.stroke();
-    rulerCtx.fillStyle='#8B6010';
-    rulerCtx.fillText((cm*2)+'km',x,40);
-  }
-  rulerCtx.strokeStyle='#8B6010';rulerCtx.lineWidth=2;rulerCtx.strokeRect(0,12,segW*10,20);
-}
-
-function initScaleSlider(){
-  const sl=document.getElementById('scale-slider');
-  function update(){
-    const cm=parseInt(sl.value);
-    document.getElementById('scale-slider-cm').textContent=cm+' cm';
-    document.getElementById('sc-step1').textContent=cm+' cm';
-    document.getElementById('sc-result').textContent=(cm*2)+' km';
-    document.getElementById('sc-sentence').textContent=cm+' cm on the map = '+(cm*2)+' km in real life';
-    drawRuler(cm);
-  }
-  sl.addEventListener('input',update);
-  update();
-}
-
-const SCALE_CHS=[
-  {q:'Two villages are 3 cm apart on the map.\nHow far is that in real life?\n(Scale: 1 cm = 2 km)',ans:'6 km',opts:['3 km','4 km','6 km','9 km'],exp:'3 \u00d7 2 = 6 km. Multiply map cm by 2 to get km.'},
-  {q:'A river is 8 km long in real life.\nHow long does it look on this map?\n(Scale: 1 cm = 2 km)',ans:'4 cm',opts:['2 cm','4 cm','8 cm','16 cm'],exp:'8 \u00f7 2 = 4 cm. Divide real km by 2 to get map cm.'},
-  {q:'The ship is 5 cm from the treasure on the map.\nScale: 1 cm = 2 km.\nReal distance?',ans:'10 km',opts:['5 km','8 km','10 km','25 km'],exp:'5 \u00d7 2 = 10 km.'},
-  {q:'Two towns are 12 km apart in real life.\nScale: 1 cm = 3 km.\nHow far apart on the map?',ans:'4 cm',opts:['3 cm','4 cm','6 cm','12 cm'],exp:'12 \u00f7 3 = 4 cm.'},
-  {q:'A road is 7 cm on the map.\nScale: 1 cm = 2 km.\nReal length?',ans:'14 km',opts:['7 km','9 km','12 km','14 km'],exp:'7 \u00d7 2 = 14 km.'},
-];
-let scaleIdx=0,scaleScore=0,scaleTotal=0;
-let scaleSelected=null;
-
-function renderScaleChallenge(){
-  if(scaleIdx>=SCALE_CHS.length)scaleIdx=0;
-  scaleSelected=null;
-  const ch=SCALE_CHS[scaleIdx];
-  const c=document.getElementById('scale-challenges');c.innerHTML='';
-  const div=document.createElement('div');div.className='dir-card';
-  const qText=ch.q.replace(/\n/g,'<br>');
-  div.innerHTML='<div class="ch-tag">Scale question '+(scaleIdx+1)+' of '+SCALE_CHS.length+'</div>'
-    +'<div class="ch-q" style="white-space:pre-line">'+qText+'</div>'
-    +'<div class="ch-opts" id="sc-opts"></div>'
-    +'<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
-    +'<button class="submit-btn" id="sc-submit" onclick="submitScale()" disabled style="opacity:.45;cursor:not-allowed">Check Answer</button>'
-    +'</div>'
-    +'<div class="ch-fb" id="sc-fb"></div>';
-  c.appendChild(div);
-  [...ch.opts].forEach(o=>{
-    const b=document.createElement('button');b.className='ch-opt';b.textContent=o;
-    b.onclick=()=>{
-      div.querySelectorAll('.ch-opt').forEach(x=>x.classList.remove('sel-opt'));
-      b.classList.add('sel-opt');
-      scaleSelected=o;
-      const sb=document.getElementById('sc-submit');
-      sb.disabled=false;sb.style.opacity='1';sb.style.cursor='pointer';
-    };
-    document.getElementById('sc-opts').appendChild(b);
-  });
-}
-
-function submitScale(){
-  if(!scaleSelected)return;
-  const ch=SCALE_CHS[scaleIdx];
-  const ok=scaleSelected===ch.ans;
-  const div=document.getElementById('scale-challenges').querySelector('.dir-card');
-  div.querySelectorAll('.ch-opt').forEach(x=>{
-    x.onclick=null;
-    if(x.textContent===scaleSelected)x.classList.add(ok?'correct':'wrong');
-    if(!ok&&x.textContent===ch.ans)x.classList.add('correct');
-    x.classList.remove('sel-opt');
-  });
-  document.getElementById('sc-fb').textContent=(ok?'\u2713 Correct! ':'\u2717 Not quite. ')+ch.exp;
-  document.getElementById('sc-fb').className='ch-fb '+(ok?'ok':'no');
-  scaleTotal++;if(ok)scaleScore++;
-  document.getElementById('scale-score').textContent=scaleScore;
-  document.getElementById('scale-total').textContent=scaleTotal;
-  const sb=document.getElementById('sc-submit');
-  sb.textContent='Next \u2192';sb.disabled=false;sb.style.opacity='1';
-  sb.onclick=()=>{scaleIdx++;renderScaleChallenge();};
-}
-
-// ── PRACTICE ─────────────────────────────────────────────────
-const Qs=[
-  {q:'On a grid map, what does the letter in a reference like "C4" tell you?',ans:'The column (left to right)',opts:['The row (up and down)','The column (left to right)','The scale','The terrain'],exp:'Letters label columns going across. Numbers label rows going down.'},
-  {q:'Which direction is directly opposite North on a compass?',ans:'South',opts:['East','West','South','North-East'],exp:'North and South are directly opposite each other.'},
-  {q:'A map scale says 1 cm = 5 km. Two towns are 4 cm apart. How far in real life?',ans:'20 km',opts:['5 km','10 km','20 km','40 km'],exp:'4 \u00d7 5 = 20 km.'},
-  {q:'You face East and turn 90° anti-clockwise. You now face:',ans:'North',opts:['South','North','West','East'],exp:'From East, turning left 90° brings you to face North.'},
-  {q:'Grid reference E3: what does the "3" tell you?',ans:'The row (third row down)',opts:['The column','The row (third row down)','3 km from centre','Third landmark'],exp:'Numbers = rows (down). "3" = third row from the top.'},
-  {q:'On a 1:100 000 map, 3 cm on the map = how many km?',ans:'3 km',opts:['1 km','3 km','30 km','300 km'],exp:'3 \u00d7 100 000 = 300 000 cm = 3 km.'},
-];
-let pqUsed=[];
-let pqSelected=null;
-
-function nextPQ(){
-  pqSelected=null;
-  if(pqUsed.length>=Qs.length)pqUsed=[];
-  let idx;do{idx=Math.floor(Math.random()*Qs.length)}while(pqUsed.includes(idx));
-  pqUsed.push(idx);
-  const q=Qs[idx];
-  document.getElementById('pq-text').textContent=q.q;
-  document.getElementById('pq-fb').textContent='';
-  document.getElementById('pq-fb').className='pq-fb';
-  const opts=document.getElementById('pq-opts');opts.innerHTML='';
-  const submitBtn=document.getElementById('pq-submit');
-  submitBtn.disabled=true;submitBtn.style.opacity='0.45';submitBtn.style.cursor='not-allowed';
-  submitBtn.textContent='Check Answer';
-  submitBtn.onclick=submitPQ;
-  [...q.opts].sort(()=>Math.random()-.5).forEach(o=>{
-    const b=document.createElement('button');b.className='ans-opt';b.textContent=o;
-    b.onclick=()=>{
-      opts.querySelectorAll('.ans-opt').forEach(x=>x.classList.remove('sel-opt'));
-      b.classList.add('sel-opt');
-      pqSelected=o;
-      submitBtn.disabled=false;submitBtn.style.opacity='1';submitBtn.style.cursor='pointer';
-    };
-    opts.appendChild(b);
-  });
-}
-
-function submitPQ(){
-  if(!pqSelected)return;
-  const q=Qs[pqUsed[pqUsed.length-1]];
-  const ok=pqSelected===q.ans;
-  const opts=document.getElementById('pq-opts');
-  opts.querySelectorAll('.ans-opt').forEach(x=>{
-    x.onclick=null;
-    if(x.textContent===pqSelected)x.classList.add(ok?'correct':'wrong');
-    if(!ok&&x.textContent===q.ans)x.classList.add('correct');
-    x.classList.remove('sel-opt');
-  });
-  document.getElementById('pq-fb').textContent=(ok?'\u2713 Correct! ':'\u2717 Not quite. ')+q.exp;
-  document.getElementById('pq-fb').className='pq-fb '+(ok?'ok':'no');
-  const submitBtn=document.getElementById('pq-submit');
-  submitBtn.textContent='Next question \u2192';
-  submitBtn.onclick=nextPQ;
-}
-
-function switchTab(t){
-  ['grid','directions','scale','practice'].forEach(x=>document.getElementById('pnl-'+x).classList.toggle('on',x===t));
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',['grid','directions','scale','practice'][i]===t));
-  if(t==='practice')nextPQ();
-  if(t==='grid')initMap();
-  if(t==='directions')drawCompass();
-  if(t==='scale'){drawRuler(3);initScaleSlider();renderScaleChallenge();}
-}
-
-window.addEventListener('resize',()=>{
-  if(document.getElementById('pnl-grid').classList.contains('on'))initMap();
-  if(document.getElementById('pnl-scale').classList.contains('on'))drawRuler(parseInt(document.getElementById('scale-slider').value));
-});
-
-// Init
-initMap();
-nextGridChallenge();
-drawCompass();
-renderDirChallenge();
-drawRuler(3);
-initScaleSlider();
-renderScaleChallenge();
-nextPQ();
 </script>
 </body>
 </html>
