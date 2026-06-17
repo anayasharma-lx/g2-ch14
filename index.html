@@ -165,8 +165,9 @@ function bldBoxes(){
     var wrap=document.createElement('div');wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:6px';
     var lbl=document.createElement('div');lbl.style.cssText='font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2)';lbl.textContent='Box '+(b+1);
     var box=document.createElement('div');
+    box.dataset.box=b;
     box.style.cssText='min-width:80px;min-height:80px;background:rgba(0,0,0,.02);border:2px dashed rgba(0,0,0,.1);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;cursor:pointer;transition:.18s';
-    box.innerHTML='<span style="font-size:10px;color:rgba(0,0,0,.2);font-weight:700;width:100%;text-align:center;padding-top:6px">tap to place</span>';
+    box.innerHTML='<span class="ph" style="font-size:10px;color:rgba(0,0,0,.2);font-weight:700;width:100%;text-align:center;padding-top:6px">tap to place</span>';
     (function(bx){box.onmouseenter=function(){box.style.borderColor='var(--ac)'};box.onmouseleave=function(){box.style.borderColor='rgba(0,0,0,.1)'};box.onclick=function(){giveToBox(bx)}})(b);
     var cnt=document.createElement('div');cnt.style.cssText='font-family:Grandstander,cursive;font-size:22px;font-weight:900;color:var(--ac)';cnt.id='bc'+b;cnt.textContent='0';
     wrap.appendChild(lbl);wrap.appendChild(box);wrap.appendChild(cnt);el.appendChild(wrap);
@@ -178,9 +179,8 @@ function giveToBox(b){
   var s=document.querySelector('#pool span[data-i="'+selIdx+'"]');
   if(s){s.classList.add('used');s.style.cssText='font-size:30px;line-height:1;opacity:.15;filter:grayscale(1);pointer-events:none;padding:3px'}
   boxContents[b].push(selIdx);selIdx=null;updPool();
-  var box=document.querySelectorAll('#boxes .\\:not(lbl)');
-  var boxes=document.querySelectorAll('#boxes div > div[style*="min-width:80px"]');
-  if(boxes[b]){var ph=boxes[b].querySelector('span');if(ph)ph.remove();var em=document.createElement('span');em.style.cssText='font-size:20px;line-height:1;animation:pop .2s';em.textContent=curObj;boxes[b].appendChild(em)}
+  var boxEl=document.querySelector('#boxes div[data-box="'+b+'"]');
+  if(boxEl){var ph=boxEl.querySelector('.ph');if(ph)ph.remove();var em=document.createElement('span');em.style.cssText='font-size:20px;line-height:1;animation:pop .2s';em.textContent=curObj;boxEl.appendChild(em)}
   document.getElementById('bc'+b).textContent=boxContents[b].length;
   updCnt();chkDone();
 }
